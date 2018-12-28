@@ -108,6 +108,10 @@ public class SequencerActor extends Actor {
         return (this.node != null);
     }
 
+    public NodeActor getNode() {
+        return this.node;
+    }
+
     public float getEffectiveArea() {
         return effectiveArea;
     }

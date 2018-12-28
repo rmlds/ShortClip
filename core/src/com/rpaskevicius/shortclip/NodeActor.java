@@ -48,4 +48,8 @@ public class NodeActor extends Actor {
     public boolean hasSequencer() {
         return (this.sequencer != null);
     }
+
+    public SequencerActor getSequencer() {
+        return this.sequencer;
+    }
 }

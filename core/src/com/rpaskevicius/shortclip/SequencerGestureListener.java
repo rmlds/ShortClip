@@ -6,6 +6,8 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 
+import javax.xml.soap.Node;
+
 public class SequencerGestureListener extends ActorGestureListener {
 
     private SequencerActor sequencerActor;
@@ -112,34 +114,59 @@ public class SequencerGestureListener extends ActorGestureListener {
 
             Actor hitResult = stage.hit(lineEnd.x, lineEnd.y, false);
 
-            if ((hitResult instanceof NodeActor) && !((NodeActor) hitResult).hasSequencer()) {
-                //An actor was hit, make connection if compatible
-                sequencerActor.setNode((NodeActor) hitResult);
+            if (hitResult == null) {
+                //No actor was hit. Remove the line, and clear references if they exist.
+
+                clearLine();
+
+                clearRefsOnSequencer(); //Clear references
             } else {
-                //No actor was hit
-                line.remove(); // remove the line from stage
-                line = null;
+                //An actor was hit.
 
-                sequencerActor.clearNode(); //remove node if there is one
+                if (hitResult instanceof NodeActor) {
+                    NodeActor node = (NodeActor) hitResult;
+
+                    //If this sequencer had a connection, clear all references
+                    if (sequencerActor.hasNode()) {
+                        //TODO Is this removal actually needed? (when switching from one node to another)
+                        sequencerActor.getNode().clearSequencer();
+                        sequencerActor.clearNode();
+                    } //TODO this awfully looks like clearRefsOnSequencer()
+
+                    //If hitResult node had a connection, clear all references
+                    if (node.hasSequencer()) {
+                        node.getSequencer().clearNode();
+                        node.clearSequencer();
+                    }
+
+                    //Assign the new references
+                    node.setSequencer(sequencerActor);
+                    sequencerActor.setNode(node);
+
+                } else {
+                    clearLine(); //TODO will cause NullPointerEx if line does not exist. To fix, create the line in touchDown instead.
+
+                    clearRefsOnSequencer(); //The actor is not NodeActor. Pretend as if no actor was hit and clear references.
+                }
             }
 
-            /*
-            //Code from SequencerActor
-
-            if (node.hasSequencer()) {
-                this.node = node;
-                this.node.setSequencer(this);
-            } else {
-                System.out.println("setNode cancelled because node has a sequencer.");
-            }
-
-            if (this.node != null) {
-                this.node.setSequencer(null);
-                this.node = null;
-            }
-            */
+            //TODO this is a huge mess. clearRefsOnSequencer() seems to be called in every possible case.
 
             initiatingConnection = false;
         }
     }
+
+    private void clearLine() {
+        line.remove(); // remove the line from stage
+        line = null;
+    }
+
+    private void clearRefsOnSequencer() {
+        if (sequencerActor.hasNode()) {
+            sequencerActor.getNode().clearSequencer();
+            sequencerActor.clearNode();
+        }
+    }
+
+
 }
