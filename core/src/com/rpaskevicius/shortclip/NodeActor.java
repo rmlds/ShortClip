@@ -10,6 +10,8 @@ public class NodeActor extends Actor {
     private Texture texture;
     private Sound sound;
 
+    private SequencerActor sequencer;
+
     public NodeActor(float x, float y, String textureName, String soundName) {
         texture = new Texture(Gdx.files.internal(textureName));
         sound = Gdx.audio.newSound(Gdx.files.internal(soundName));
@@ -33,5 +35,17 @@ public class NodeActor extends Actor {
     @Override
     public void draw (Batch batch, float parentAlpha) {
         batch.draw(texture, getX(), getY());
+    }
+
+    public void setSequencer(SequencerActor sequencer) {
+        this.sequencer = sequencer;
+    }
+
+    public void clearSequencer() {
+        this.sequencer = null;
+    }
+
+    public boolean hasSequencer() {
+        return (this.sequencer != null);
     }
 }

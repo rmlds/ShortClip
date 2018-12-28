@@ -78,17 +78,24 @@ public class LineActor extends Actor {
         float halfDistance = distance / 2.0f;
 
         midLower.x = start.x + halfDistance;
+        midLower.y = start.y;
+
         midUpper.x = end.x - halfDistance;
+        midUpper.y = end.y;
     }
 
     public void setStart(Vector2 start) {
-        this.start = start;
+//        this.start = start;
+        this.start.x = start.x;
+        this.start.y = start.y;
 
         updateMidPoints();
     }
 
     public void setEnd(Vector2 end) {
-        this.end = end;
+//        this.end = end;
+        this.end.x = end.x;
+        this.end.y = end.y;
 
         updateMidPoints();
     }

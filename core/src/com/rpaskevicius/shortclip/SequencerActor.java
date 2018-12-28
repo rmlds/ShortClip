@@ -24,9 +24,10 @@ public class SequencerActor extends Actor {
 
     private int currentIndex;
 
-    private ShapeRenderer renderer = new ShapeRenderer();
+    private float effectiveArea;
+    private float panelArea;
 
-    public SequencerActor(float x, float y, String textureName, int stepCount, Stage stage) {
+    public SequencerActor(float x, float y, String textureName, int stepCount, float panelWidth, Stage stage) {
         texture = new Texture(Gdx.files.internal(textureName));
 
         setPosition(x, y);
@@ -39,6 +40,9 @@ public class SequencerActor extends Actor {
         steps = new boolean[stepCount];
 
         currentIndex = -1; //otherwise the 0th step at the very start won't be triggered. TODO Should also do this on time.stop();
+
+        panelArea = panelWidth;
+        effectiveArea = texture.getWidth() - panelWidth;
     }
 
     @Override
@@ -50,7 +54,7 @@ public class SequencerActor extends Actor {
     public void draw (Batch batch, float parentAlpha) {
         batch.draw(texture, getX(), getY());
 
-        float stepWidth = getWidth() / getStepCount();
+        float stepWidth = getEffectiveArea() / getStepCount();
 
         //draw individual steps
         for (int i = 0; i < stepCount; i++) {
@@ -58,14 +62,6 @@ public class SequencerActor extends Actor {
                 batch.draw(stepTexture, getX() + (i * stepWidth), getY());
             }
         }
-
-        batch.end();
-
-        renderer.begin(ShapeRenderer.ShapeType.Line);
-        renderer.line(getX(), getY(), node.getX(), node.getY()); // only for debug, bad berformance
-        renderer.end();
-
-        batch.begin();
     }
 
     public int getStepCount() {
@@ -85,7 +81,7 @@ public class SequencerActor extends Actor {
 
         //System.out.println("onNextStep");
 
-        if (steps[stepIndex]) {
+        if (node != null && steps[stepIndex]) {
             node.play();
         }
     }
@@ -100,5 +96,23 @@ public class SequencerActor extends Actor {
 
     public void setNode(NodeActor node) {
         this.node = node;
+        this.node.setSequencer(this);
+    }
+
+    public void clearNode() {
+        this.node.clearSequencer();
+        this.node = null;
+    }
+
+    public boolean hasNode() {
+        return (this.node != null);
+    }
+
+    public float getEffectiveArea() {
+        return effectiveArea;
+    }
+
+    public float getPanelArea() {
+        return panelArea;
     }
 }

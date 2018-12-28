@@ -13,6 +13,7 @@ import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import javax.sound.sampled.Line;
@@ -24,7 +25,7 @@ public class ShortClip extends ApplicationAdapter {
 	
 	@Override
 	public void create () {
-		stage = new Stage(new ScreenViewport());
+		stage = new Stage(new ExtendViewport(640, 360));
 		time = new TimeDispatcher(120.0f);
 
 		InputMultiplexer multiplexer = new InputMultiplexer();
@@ -32,29 +33,27 @@ public class ShortClip extends ApplicationAdapter {
 		multiplexer.addProcessor(new GestureDetector(new CameraGestureListener(stage.getCamera())));
 		Gdx.input.setInputProcessor(multiplexer);
 
-		NodeActor node1 = new NodeActor(0, 0, "node-purple.png", "kick-1.wav");
-		NodeActor node2 = new NodeActor(100, 100, "node-blue.png", "clap-1.wav");
+		NodeActor node1 = new NodeActor(0, 0, "node-purple-w-connector.png", "kick-01.wav");
+		NodeActor node2 = new NodeActor(100, 100, "node-blue.png", "snare-01.wav");
+		NodeActor node3 = new NodeActor(50, 50, "node-blue.png", "closed-hihat-01.wav");
 
 		stage.addActor(node1);
 		stage.addActor(node2);
+		stage.addActor(node3);
 
-		SequencerActor sequencer1 = new SequencerActor(0, 0, "sequencer-grey.png", 16, stage);
-		SequencerActor sequencer2 = new SequencerActor(200, 200, "sequencer-grey.png", 16, stage);
-
-		sequencer1.setNode(node1);
-        sequencer2.setNode(node2);
+		SequencerActor sequencer1 = new SequencerActor(0, 0, "sequencer-grey-w-panel-white.png", 16, 32, stage);
+		SequencerActor sequencer2 = new SequencerActor(200, 200, "sequencer-grey-w-panel-white.png", 16, 32, stage);
+		SequencerActor sequencer3 = new SequencerActor(100, 100, "sequencer-grey-w-panel-white.png", 16, 32, stage);
 
 		stage.addActor(sequencer1);
 		stage.addActor(sequencer2);
+		stage.addActor(sequencer3);
 
-//		time.addListener(sequencer1);
-//		time.addListener(sequencer2);
+		time.addListener(sequencer1);
+		time.addListener(sequencer2);
+		time.addListener(sequencer3);
 
 		time.start();
-
-//		LineActor line1 = new LineActor(new Vector2(10,10), new Vector2(210,110), "line-segment.png");
-//		stage.addActor(line1);
-
 
 	}
 

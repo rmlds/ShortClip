@@ -17,6 +17,8 @@ public class NodeGestureListener extends ActorGestureListener {
         nodeActor.setPosition(nodeActor.getX() + deltaX, nodeActor.getY() + deltaY);
         System.out.println("Node: " + nodeActor.getX() + " " + nodeActor.getY());
 
+        //TODO panning should update sequencerActor lineEnd position
+
         event.handle(); //inform Stage that this event has been handled
     }
 }
