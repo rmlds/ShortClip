@@ -13,6 +13,7 @@ public class TimeDispatcher {
 
     private long startTime;
     private long runningTime;
+    private long previousTime;
 
     private boolean isRunning;
 
@@ -46,9 +47,10 @@ public class TimeDispatcher {
 
     public void update() {
         if (isRunning) {
-            long delta = TimeUtils.timeSinceMillis(startTime) - runningTime;
-
+            previousTime = runningTime;
             runningTime = TimeUtils.timeSinceMillis(startTime);
+
+            long delta = runningTime - previousTime;
 
             sequencePartial += delta;
             if (sequencePartial >= sequenceDuration) {
@@ -56,6 +58,7 @@ public class TimeDispatcher {
             }
 
             dispatchStepEvents();
+            dispatchMarkerPositions();
         }
     }
 
@@ -70,6 +73,12 @@ public class TimeDispatcher {
             if (stepIndex != listener.getCurrentIndex()) {
                 listener.onNextStep(stepIndex); //TODO still sometimes gives ArrayIndexOutOfBoundsException
             }
+        }
+    }
+
+    public void dispatchMarkerPositions() {
+        for (SequencerActor listener : listeners) {
+            listener.onNextMarkerPosition(sequencePartial, sequenceDuration);
         }
     }
 }

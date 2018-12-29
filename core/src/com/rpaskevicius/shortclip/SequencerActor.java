@@ -24,6 +24,15 @@ public class SequencerActor extends Actor {
     private LineActor line;
     private Stage stage;
 
+    private float markerPosition;
+    private Texture markerTexture = new Texture(Gdx.files.internal("marker-white.png"));
+
+    private Texture stepHolderTexture = new Texture(Gdx.files.internal("step-holder.png"));
+    private Texture stepHolderSmallTexture = new Texture(Gdx.files.internal("step-holder-small.png"));
+
+    private float stepHolderOffsetY;
+    private float stepHolderSmallOffsetY;
+
     public SequencerActor(float x, float y, String textureName, int stepCount, float panelWidth, Stage stage) {
         texture = new Texture(Gdx.files.internal(textureName));
 
@@ -42,6 +51,9 @@ public class SequencerActor extends Actor {
 
         panelArea = panelWidth;
         effectiveArea = texture.getWidth() - panelWidth;
+
+        stepHolderOffsetY = (getHeight() - stepHolderTexture.getHeight()) / 2.0f;
+        stepHolderSmallOffsetY = (getHeight() - stepHolderSmallTexture.getHeight()) / 2.0f;
     }
 
     @Override
@@ -55,12 +67,22 @@ public class SequencerActor extends Actor {
 
         float stepWidth = getEffectiveArea() / getStepCount();
 
-        //draw individual steps
         for (int i = 0; i < stepCount; i++) {
+            //draw individual steps
             if (steps[i]) {
                 batch.draw(stepTexture, getX() + (i * stepWidth), getY());
             }
+
+            //draw step holders
+            if (i % 4 == 0) {
+                batch.draw(stepHolderTexture, getX() + (i * stepWidth), getY() + stepHolderOffsetY);
+            } else {
+                batch.draw(stepHolderSmallTexture, getX() + (i * stepWidth), getY() + stepHolderSmallOffsetY);
+            }
         }
+
+        //draw the playback marker
+        batch.draw(markerTexture, markerPosition, getY());
     }
 
     public int getStepCount() {
@@ -142,5 +164,11 @@ public class SequencerActor extends Actor {
         float pointY = getHeight() / 2.0f;
 
         return localToStageCoordinates(new Vector2(pointX, pointY));
+    }
+
+    public void onNextMarkerPosition(long sequencePartial, long sequenceDuration) {
+        float ratio = (float) sequencePartial / (float) sequenceDuration;
+
+        markerPosition = getX() + (getEffectiveArea() * ratio);
     }
 }
