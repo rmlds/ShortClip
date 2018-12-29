@@ -14,10 +14,17 @@ public class NodeGestureListener extends ActorGestureListener {
 
     @Override
     public void pan(InputEvent event, float x, float y, float deltaX, float deltaY) {
+        //Move the node
         nodeActor.setPosition(nodeActor.getX() + deltaX, nodeActor.getY() + deltaY);
         System.out.println("Node: " + nodeActor.getX() + " " + nodeActor.getY());
 
-        //TODO panning should update sequencerActor lineEnd position
+        //Moving the node also updates lineEnd position
+        if (nodeActor.hasSequencer() && nodeActor.getSequencer().hasLine()) {
+
+            Vector2 lineEnd = nodeActor.getConnectionPoint();
+
+            nodeActor.getSequencer().getLine().setEnd(lineEnd);
+        }
 
         event.handle(); //inform Stage that this event has been handled
     }

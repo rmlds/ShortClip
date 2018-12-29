@@ -4,7 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+
+import java.util.Vector;
 
 public class NodeActor extends Actor {
     private Texture texture;
@@ -51,5 +54,12 @@ public class NodeActor extends Actor {
 
     public SequencerActor getSequencer() {
         return this.sequencer;
+    }
+
+    public Vector2 getConnectionPoint() {
+        float pointX = 16.0f;
+        float pointY = getHeight() / 2.0f;
+
+        return localToStageCoordinates(new Vector2(pointX, pointY));
     }
 }

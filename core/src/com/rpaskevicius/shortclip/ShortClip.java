@@ -34,7 +34,7 @@ public class ShortClip extends ApplicationAdapter {
 		Gdx.input.setInputProcessor(multiplexer);
 
 		NodeActor node1 = new NodeActor(0, 0, "node-purple-w-connector.png", "kick-01.wav");
-		NodeActor node2 = new NodeActor(100, 100, "node-blue.png", "snare-01.wav");
+		NodeActor node2 = new NodeActor(100, 100, "node-blue.png", "shaker-01.wav");
 		NodeActor node3 = new NodeActor(50, 50, "node-blue.png", "closed-hihat-01.wav");
 
 		stage.addActor(node1);
