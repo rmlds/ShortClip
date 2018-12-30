@@ -1,13 +1,12 @@
 package com.rpaskevicius.shortclip;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-
-import java.util.Vector;
 
 public class NodeActor extends Actor {
     private Texture texture;
@@ -15,7 +14,7 @@ public class NodeActor extends Actor {
 
     private SequencerActor sequencer;
 
-    public NodeActor(float x, float y, String textureName, String soundName) {
+    public NodeActor(float x, float y, String textureName, String soundName, AssetManager assetManager) {
         texture = new Texture(Gdx.files.internal(textureName));
         sound = Gdx.audio.newSound(Gdx.files.internal(soundName));
 
@@ -23,7 +22,7 @@ public class NodeActor extends Actor {
 
         setBounds(getX(), getY(), texture.getWidth(), texture.getHeight());
 
-        addListener(new NodeGestureListener(this));
+        addListener(new NodeGestureListener(this, assetManager));
     }
 
     public void play(){

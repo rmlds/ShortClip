@@ -1,8 +1,8 @@
 package com.rpaskevicius.shortclip;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.*;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -14,15 +14,18 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
-public class ShortClip extends ApplicationAdapter {
+public class ShortClip extends ScreenAdapter {
 
 	private Stage stageUI;
 	private Stage stage;
 
 	private TimeDispatcher time;
-	
-	@Override
-	public void create () {
+
+	private AssetManager assetManager;
+
+	public ShortClip(Game launchScreen, AssetManager assetManager) {
+		this.assetManager = assetManager;
+
 		stageUI = new Stage(new ExtendViewport(640, 360));
 		stage = new Stage(new ExtendViewport(640, 360));
 
@@ -49,16 +52,16 @@ public class ShortClip extends ApplicationAdapter {
 	}
 
 	@Override
-	public void render () {
-		float delta = Gdx.graphics.getDeltaTime();
+	public void render(float delta) {
+		float deltaTime = Gdx.graphics.getDeltaTime();
 
 		Gdx.gl.glClearColor(0.2f, 0, 0.3f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT | (Gdx.graphics.getBufferFormat().coverageSampling?GL20.GL_COVERAGE_BUFFER_BIT_NV:0));
 
-		stage.act(delta);
+		stage.act(deltaTime);
 		stage.draw();
 
-		stageUI.act(delta);
+		stageUI.act(deltaTime);
 		stageUI.draw();
 
 		time.update();
@@ -66,7 +69,10 @@ public class ShortClip extends ApplicationAdapter {
 
 	@Override
 	public void dispose () {
+		stageUI.dispose();
 		stage.dispose();
+
+		//TODO dispose resources
 	}
 
 	private Skin createSkin() {
@@ -94,7 +100,7 @@ public class ShortClip extends ApplicationAdapter {
 		Button addNode = new Button(skin, "ui-add-node");
 		Button addSequencer = new Button(skin, "ui-add-sequencer");
 
-		addNode.addListener(new NodeButtonListener(stage));
+		addNode.addListener(new NodeButtonListener(stage, assetManager));
 		addSequencer.addListener(new SequencerButtonListener(stage, time));
 
 		lowerUI.add(addSequencer);
