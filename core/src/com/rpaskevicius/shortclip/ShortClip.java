@@ -23,6 +23,8 @@ public class ShortClip extends ScreenAdapter {
 
 	private AssetManager assetManager;
 
+	private Table centerUI;
+
 	public ShortClip(Game launchScreen, AssetManager assetManager) {
 		this.assetManager = assetManager;
 
@@ -45,10 +47,14 @@ public class ShortClip extends ScreenAdapter {
 		Table table = new Table();
 		table.setFillParent(true);
 
+		centerUI = new Table();
+		table.add(centerUI).expand();
+
 		Table lowerUI = createLowerUI(skin);
 		table.add(lowerUI).expand().bottom().right();
 
 		stageUI.addActor(table);
+//		stageUI.setDebugAll(true);
 	}
 
 	@Override
@@ -100,7 +106,7 @@ public class ShortClip extends ScreenAdapter {
 		Button addNode = new Button(skin, "ui-add-node");
 		Button addSequencer = new Button(skin, "ui-add-sequencer");
 
-		addNode.addListener(new NodeButtonListener(stage, assetManager));
+		addNode.addListener(new NodeButtonListener(stage, assetManager, centerUI));
 		addSequencer.addListener(new SequencerButtonListener(stage, time));
 
 		lowerUI.add(addSequencer);

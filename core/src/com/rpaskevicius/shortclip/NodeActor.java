@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
 public class NodeActor extends Actor {
     private Texture texture;
@@ -14,7 +15,9 @@ public class NodeActor extends Actor {
 
     private SequencerActor sequencer;
 
-    public NodeActor(float x, float y, String textureName, String soundName, AssetManager assetManager) {
+    private AssetManager assetManager;
+
+    public NodeActor(float x, float y, String textureName, String soundName, AssetManager assetManager, Table centerUI) {
         texture = new Texture(Gdx.files.internal(textureName));
         sound = Gdx.audio.newSound(Gdx.files.internal(soundName));
 
@@ -22,7 +25,9 @@ public class NodeActor extends Actor {
 
         setBounds(getX(), getY(), texture.getWidth(), texture.getHeight());
 
-        addListener(new NodeGestureListener(this, assetManager));
+        addListener(new NodeGestureListener(this, assetManager, centerUI));
+
+        this.assetManager = assetManager;
     }
 
     public void play(){
@@ -60,5 +65,9 @@ public class NodeActor extends Actor {
         float pointY = getHeight() / 2.0f;
 
         return localToStageCoordinates(new Vector2(pointX, pointY));
+    }
+
+    public void setSound(String sound) {
+        this.sound = assetManager.get(sound, Sound.class);
     }
 }
