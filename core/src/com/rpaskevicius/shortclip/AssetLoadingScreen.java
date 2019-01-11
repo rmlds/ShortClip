@@ -51,7 +51,7 @@ public class AssetLoadingScreen extends ScreenAdapter {
 
         if (assetManager.update()) {
             System.out.println("Assets loaded. Switching screens...");
-            launchScreen.setScreen(new ShortClip(launchScreen, assetManager));
+            launchScreen.setScreen(new MainMenuScreen(launchScreen, assetManager));
         }
     }
 
