@@ -51,7 +51,7 @@ public class NetworkMessage {
         String output = "";
 
         for (int i = 0; i < length; i++) {
-            output += (byte)(this.data[i + 2]);
+            output += (char)(this.data[i + 2]);
         }
 
         return output;

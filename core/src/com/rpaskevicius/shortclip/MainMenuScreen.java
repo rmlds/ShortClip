@@ -9,10 +9,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.net.Socket;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
 public class MainMenuScreen extends ScreenAdapter {
@@ -51,7 +48,7 @@ public class MainMenuScreen extends ScreenAdapter {
         table.setFillParent(true);
 
         Table mainUI = createMainUI(skin);
-        table.add(mainUI).expand().top().left();
+        table.add(mainUI).expand(); //.top().left();
 
         stageUI.addActor(table);
 		stageUI.setDebugAll(true);
@@ -100,6 +97,12 @@ public class MainMenuScreen extends ScreenAdapter {
         joinRoomStyle.font = skin.getFont("default");
         skin.add("ui-join-room", joinRoomStyle);
 
+        TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
+        textFieldStyle.background = skin.newDrawable("text-button-texture", Color.LIGHT_GRAY);
+        textFieldStyle.font = skin.getFont("default");
+        textFieldStyle.fontColor = Color.WHITE;
+        skin.add("ui-text-field", textFieldStyle);
+
         return skin;
     }
 
@@ -108,13 +111,16 @@ public class MainMenuScreen extends ScreenAdapter {
 
         TextButton createRoom = new TextButton("create room", skin, "ui-create-room");
         TextButton joinRoom = new TextButton("join room", skin, "ui-join-room");
+        TextField textField = new TextField("Enter Room ID", skin, "ui-text-field");
 
         createRoom.addListener(new CreateRoomListener(networkHandler));
-        joinRoom.addListener(new JoinRoomListener(networkHandler));
+        joinRoom.addListener(new JoinRoomListener(networkHandler, textField));
 
         mainUI.add(createRoom);
         mainUI.row();
         mainUI.add(joinRoom);
+        mainUI.row();
+        mainUI.add(textField);
 
         return mainUI;
     }

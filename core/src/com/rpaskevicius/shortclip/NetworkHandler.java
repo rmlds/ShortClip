@@ -50,6 +50,44 @@ public class NetworkHandler {
                 System.out.println("Received data: " + message.getAction() + " " + message.getParam() + " core: " + message.readCore(message.getLength() - 2));
 
                 //TODO handle the message
+                byte action = message.getAction();
+                byte param = message.getParam();
+
+                if (action == 0) { //something about rooms
+                    if (param == 0) {
+                        //new room created successfully
+                        //TODO switch to game screen
+
+                        String roomID = message.readCore(8);
+                        System.out.println("Room success. Room ID: " + roomID);
+
+                        //launchScreen.setScreen(new ShortClip(launchScreen, assetManager));
+
+                    } else if (param == 1) {
+                        //existing room joined successfully
+                        //TODO switch to game screen
+
+                        String roomID = message.readCore(8);
+                        System.out.println("Room success. Room ID: " + roomID);
+
+                        //launchScreen.setScreen(new ShortClip(launchScreen, assetManager));
+
+                    } else if (param == 44) {
+                        //room not found
+                        //TODO display helpful message
+
+                        System.out.println("Room error. Room not found.");
+
+                    } else if (param == 40) {
+                        //user requested an invalid param
+                    } else {
+                        //server sent an invalid param
+                    }
+                } else if (action == 40) {
+                    //user requested an invalid action
+                } else {
+                    //server sent an invalid action
+                }
 
                 receivedHeader = false;
             }
