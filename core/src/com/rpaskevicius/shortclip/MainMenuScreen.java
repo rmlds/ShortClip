@@ -23,6 +23,8 @@ public class MainMenuScreen extends ScreenAdapter {
     private Stage stageUI;
     private Stage stage;
 
+    private Label errorLabel;
+
     public MainMenuScreen(Game launchScreen, AssetManager assetManager) {
         this.launchScreen = launchScreen;
         this.assetManager = assetManager;
@@ -103,6 +105,11 @@ public class MainMenuScreen extends ScreenAdapter {
         textFieldStyle.fontColor = Color.WHITE;
         skin.add("ui-text-field", textFieldStyle);
 
+        Label.LabelStyle labelStyle = new Label.LabelStyle();
+        labelStyle.font = skin.getFont("default");
+        labelStyle.fontColor = Color.WHITE;
+        skin.add("ui-label", labelStyle);
+
         return skin;
     }
 
@@ -111,16 +118,19 @@ public class MainMenuScreen extends ScreenAdapter {
 
         TextButton createRoom = new TextButton("create room", skin, "ui-create-room");
         TextButton joinRoom = new TextButton("join room", skin, "ui-join-room");
-        TextField textField = new TextField("Enter Room ID", skin, "ui-text-field");
+        TextField textField = new TextField("HUMEAYLN", skin, "ui-text-field");
+        errorLabel = new Label("To join an existing room, enter room ID above", skin, "ui-label");
 
         createRoom.addListener(new CreateRoomListener(initHandler));
-        joinRoom.addListener(new JoinRoomListener(initHandler, textField));
+        joinRoom.addListener(new JoinRoomListener(initHandler, textField, errorLabel));
 
         mainUI.add(createRoom);
         mainUI.row();
         mainUI.add(joinRoom);
         mainUI.row();
         mainUI.add(textField);
+        mainUI.row();
+        mainUI.add(errorLabel);
 
         return mainUI;
     }
@@ -131,5 +141,9 @@ public class MainMenuScreen extends ScreenAdapter {
 
     public AssetManager getAssetManager() {
         return assetManager;
+    }
+
+    public Label getErrorLabel() {
+        return errorLabel;
     }
 }

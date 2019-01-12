@@ -6,8 +6,10 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -50,14 +52,19 @@ public class ShortClip extends ScreenAdapter {
 		Table table = new Table();
 		table.setFillParent(true);
 
+		Table upperUI = createUpperUI(skin);
+		table.add(upperUI).expand().top().left();
+		table.row();
+
 		centerUI = new Table();
 		table.add(centerUI).expand();
+		table.row();
 
 		Table lowerUI = createLowerUI(skin);
 		table.add(lowerUI).expand().bottom().right();
 
 		stageUI.addActor(table);
-//		stageUI.setDebugAll(true);
+		stageUI.setDebugAll(true);
 	}
 
 	@Override
@@ -87,6 +94,15 @@ public class ShortClip extends ScreenAdapter {
 	private Skin createSkin() {
 		Skin skin = new Skin();
 
+		//UpperUI
+		skin.add("default", new BitmapFont());
+
+		Label.LabelStyle labelStyle = new Label.LabelStyle();
+		labelStyle.font = skin.getFont("default");
+		labelStyle.fontColor = Color.WHITE;
+		skin.add("ui-room-label", labelStyle);
+
+		//LowerUI
 		skin.add("ui-add-node-texture", new Texture(Gdx.files.internal("ui-add-node.png")));
 		skin.add("ui-add-sequencer-texture", new Texture(Gdx.files.internal("ui-add-sequencer.png")));
 
@@ -116,5 +132,15 @@ public class ShortClip extends ScreenAdapter {
 		lowerUI.add(addNode);
 
 		return lowerUI;
+	}
+
+	private Table createUpperUI(Skin skin) {
+		Table upperUI = new Table();
+
+		Label roomLabel = new Label("Room ID: " + roomID, skin, "ui-room-label");
+
+		upperUI.add(roomLabel);
+
+		return upperUI;
 	}
 }

@@ -1,6 +1,5 @@
 package com.rpaskevicius.shortclip;
 
-import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.net.Socket;
 
 public class InitHandler extends NetworkHandler {
@@ -14,7 +13,6 @@ public class InitHandler extends NetworkHandler {
 
     @Override
     protected void handleMessage() {
-        //TODO handle the message
         byte action = message.getAction();
         byte param = message.getParam();
 
@@ -37,19 +35,20 @@ public class InitHandler extends NetworkHandler {
 
             } else if (param == 44) {
                 //room not found
-                //TODO display helpful message
-
-                System.out.println("Room error. Room not found.");
-
+                currentScreen.getErrorLabel().setText("Error: Room not found.");
             } else if (param == 40) {
                 //user requested an invalid param
+                currentScreen.getErrorLabel().setText("Error: user requested an invalid param.");
             } else {
                 //server sent an invalid param
+                currentScreen.getErrorLabel().setText("Error: server sent an invalid param.");
             }
         } else if (action == 40) {
             //user requested an invalid action
+            currentScreen.getErrorLabel().setText("Error: user requested an invalid action.");
         } else {
             //server sent an invalid action
+            currentScreen.getErrorLabel().setText("Error: server sent an invalid action.");
         }
     }
 
