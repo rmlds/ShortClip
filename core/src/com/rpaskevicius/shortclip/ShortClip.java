@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.net.Socket;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -27,11 +28,17 @@ public class ShortClip extends ScreenAdapter {
 
 	private Table centerUI;
 
+	private Socket socket;
 	private String roomID;
 
-	public ShortClip(Game launchScreen, AssetManager assetManager, String roomID) {
+	private DataHandler dataHandler;
+
+	public ShortClip(Game launchScreen, AssetManager assetManager, Socket socket, String roomID) {
 		this.assetManager = assetManager;
+		this.socket = socket;
 		this.roomID = roomID;
+
+		this.dataHandler = new DataHandler(socket, this);
 
 		stageUI = new Stage(new ExtendViewport(640, 360));
 		stage = new Stage(new ExtendViewport(640, 360));
@@ -73,6 +80,8 @@ public class ShortClip extends ScreenAdapter {
 
 		Gdx.gl.glClearColor(0.2f, 0, 0.3f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT | (Gdx.graphics.getBufferFormat().coverageSampling?GL20.GL_COVERAGE_BUFFER_BIT_NV:0));
+
+		dataHandler.readMessage();
 
 		stage.act(deltaTime);
 		stage.draw();
