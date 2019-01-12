@@ -5,10 +5,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class CreateRoomListener extends ClickListener {
 
-    private NetworkHandler networkHandler;
+    private InitHandler initHandler;
 
-    public CreateRoomListener(NetworkHandler networkHandler) {
-        this.networkHandler = networkHandler;
+    public CreateRoomListener(InitHandler initHandler) {
+        this.initHandler = initHandler;
     }
 
     @Override
@@ -18,6 +18,6 @@ public class CreateRoomListener extends ClickListener {
         NetworkMessage message = new NetworkMessage();
         message.build(0, 0);
 
-        networkHandler.writeMessage(message);
+        initHandler.writeMessage(message);
     }
 }

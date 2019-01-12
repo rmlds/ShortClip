@@ -1,0 +1,61 @@
+package com.rpaskevicius.shortclip;
+
+import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.net.Socket;
+
+public class InitHandler extends NetworkHandler {
+
+    private MainMenuScreen currentScreen;
+
+    public InitHandler(Socket socket, MainMenuScreen currentScreen) {
+        super(socket);
+        this.currentScreen = currentScreen;
+    }
+
+    @Override
+    protected void handleMessage() {
+        //TODO handle the message
+        byte action = message.getAction();
+        byte param = message.getParam();
+
+        if (action == 0) { //something about rooms
+            if (param == 0) {
+                //new room created successfully
+
+                String roomID = message.readCore(8);
+                System.out.println("Room success. Room ID: " + roomID);
+
+                launchShortClip(roomID);
+
+            } else if (param == 1) {
+                //existing room joined successfully
+
+                String roomID = message.readCore(8);
+                System.out.println("Room success. Room ID: " + roomID);
+
+                launchShortClip(roomID);
+
+            } else if (param == 44) {
+                //room not found
+                //TODO display helpful message
+
+                System.out.println("Room error. Room not found.");
+
+            } else if (param == 40) {
+                //user requested an invalid param
+            } else {
+                //server sent an invalid param
+            }
+        } else if (action == 40) {
+            //user requested an invalid action
+        } else {
+            //server sent an invalid action
+        }
+    }
+
+    private void launchShortClip(String roomID) {
+        currentScreen.getLaunchScreen().setScreen(
+                new ShortClip(currentScreen.getLaunchScreen(), currentScreen.getAssetManager(), roomID)
+        );
+    }
+}

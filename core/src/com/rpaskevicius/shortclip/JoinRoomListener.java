@@ -6,11 +6,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class JoinRoomListener extends ClickListener {
 
-    private NetworkHandler networkHandler;
+    private InitHandler initHandler;
     private TextField textField;
 
-    public JoinRoomListener(NetworkHandler networkHandler, TextField textField) {
-        this.networkHandler = networkHandler;
+    public JoinRoomListener(InitHandler initHandler, TextField textField) {
+        this.initHandler = initHandler;
         this.textField = textField;
     }
 
@@ -35,7 +35,7 @@ public class JoinRoomListener extends ClickListener {
             message.build(0, 1, 8);
             message.writeCore(roomID);
 
-            networkHandler.writeMessage(message);
+            initHandler.writeMessage(message);
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -25,8 +25,11 @@ public class ShortClip extends ScreenAdapter {
 
 	private Table centerUI;
 
-	public ShortClip(Game launchScreen, AssetManager assetManager) {
+	private String roomID;
+
+	public ShortClip(Game launchScreen, AssetManager assetManager, String roomID) {
 		this.assetManager = assetManager;
+		this.roomID = roomID;
 
 		stageUI = new Stage(new ExtendViewport(640, 360));
 		stage = new Stage(new ExtendViewport(640, 360));

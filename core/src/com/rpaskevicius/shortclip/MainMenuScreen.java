@@ -18,7 +18,7 @@ public class MainMenuScreen extends ScreenAdapter {
     private AssetManager assetManager;
 
     private Socket socket;
-    private NetworkHandler networkHandler;
+    private InitHandler initHandler;
 
     private Stage stageUI;
     private Stage stage;
@@ -31,7 +31,7 @@ public class MainMenuScreen extends ScreenAdapter {
         socket = Gdx.net.newClientSocket(Net.Protocol.TCP, "localhost", 13, null);
         System.out.println("Connected successfully.");
 
-        networkHandler = new NetworkHandler(socket);
+        initHandler = new InitHandler(socket, this);
 
         stageUI = new Stage(new ExtendViewport(640, 360));
         stage = new Stage(new ExtendViewport(640, 360));
@@ -61,7 +61,7 @@ public class MainMenuScreen extends ScreenAdapter {
         Gdx.gl.glClearColor(0.2f, 0, 0.3f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT | (Gdx.graphics.getBufferFormat().coverageSampling?GL20.GL_COVERAGE_BUFFER_BIT_NV:0));
 
-        networkHandler.readMessage();
+        initHandler.readMessage();
 
         stage.act(deltaTime);
         stage.draw();
@@ -113,8 +113,8 @@ public class MainMenuScreen extends ScreenAdapter {
         TextButton joinRoom = new TextButton("join room", skin, "ui-join-room");
         TextField textField = new TextField("Enter Room ID", skin, "ui-text-field");
 
-        createRoom.addListener(new CreateRoomListener(networkHandler));
-        joinRoom.addListener(new JoinRoomListener(networkHandler, textField));
+        createRoom.addListener(new CreateRoomListener(initHandler));
+        joinRoom.addListener(new JoinRoomListener(initHandler, textField));
 
         mainUI.add(createRoom);
         mainUI.row();
@@ -123,5 +123,13 @@ public class MainMenuScreen extends ScreenAdapter {
         mainUI.add(textField);
 
         return mainUI;
+    }
+
+    public Game getLaunchScreen() {
+        return launchScreen;
+    }
+
+    public AssetManager getAssetManager() {
+        return assetManager;
     }
 }
