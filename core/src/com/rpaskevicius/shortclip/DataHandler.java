@@ -107,6 +107,27 @@ public class DataHandler extends NetworkHandler {
             } else {
                 //server sent an invalid param
             }
+        } else if (action == 1) { //something about sequencers
+            if (param == 0) {
+                //create new sequencer
+
+                String sequencerID = message.readStr(8);
+
+                System.out.println("New sequencer ID: " + sequencerID);
+
+                System.out.println("Debug: " + message.debug(18));
+
+                int x = message.readInt(8);
+                int y = message.readInt(12);
+
+                System.out.println("Received message to create new sequencer. x: " + x + " y: " + y);
+
+                SequencerActor sequencer = new SequencerActor(sequencerID, x, y, "sequencer-grey-w-panel-white.png", 16, 32, currentScreen.getStage());
+
+                currentScreen.getTimeDispatcher().addListener(sequencer);
+                currentScreen.getStage().addActor(sequencer);
+            }
+
         } else if (action == 40) {
             //user requested an invalid action
         } else {

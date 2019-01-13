@@ -33,7 +33,10 @@ public class SequencerActor extends Actor {
     private float stepHolderOffsetY;
     private float stepHolderSmallOffsetY;
 
-    public SequencerActor(float x, float y, String textureName, int stepCount, float panelWidth, Stage stage) {
+    private String sequencerID;
+
+    public SequencerActor(String sequencerID, float x, float y, String textureName, int stepCount, float panelWidth, Stage stage) {
+        this.sequencerID = sequencerID;
         texture = new Texture(Gdx.files.internal(textureName));
 
         setPosition(x, y);
@@ -170,5 +173,9 @@ public class SequencerActor extends Actor {
         float ratio = (float) sequencePartial / (float) sequenceDuration;
 
         markerPosition = getX() + (getEffectiveArea() * ratio);
+    }
+
+    public String getSequencerID() {
+        return this.sequencerID;
     }
 }

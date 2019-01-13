@@ -135,7 +135,7 @@ public class ShortClip extends ScreenAdapter {
 		Button addSequencer = new Button(skin, "ui-add-sequencer");
 
 		addNode.addListener(new NodeButtonListener(this, stage, assetManager, centerUI));
-		addSequencer.addListener(new SequencerButtonListener(stage, time));
+		addSequencer.addListener(new SequencerButtonListener(this, stage, time));
 
 		lowerUI.add(addSequencer);
 		lowerUI.add(addNode);
@@ -168,4 +168,9 @@ public class ShortClip extends ScreenAdapter {
 	public Table getCenterUI() {
 		return centerUI;
 	}
+
+	public TimeDispatcher getTimeDispatcher() {
+		return time;
+	}
+
 }
