@@ -27,11 +27,11 @@ public class NodeButtonListener extends ClickListener {
         //ask server to create the node
         NetworkMessage message = new NetworkMessage();
         message.build(0, 0, 8); // don't forget to include coreLength!
-        message.writeCore(SerialUtils.intToArray((int)center.x), 0); //we also need to send coords in message core
-        message.writeCore(SerialUtils.intToArray((int)center.y), 4);
+        message.writeInt((int)center.x, 0); //we also need to send coords in message core
+        message.writeInt((int)center.y, 4);
 
-        System.out.println("Sending message to create new node. Core: ");
-        System.out.println(message.debugCore(8));
+        System.out.println("Sending message to create new node. Debug: ");
+        System.out.println(message.debug(8));
 
         currentScreen.getDataHandler().writeMessage(message);
 

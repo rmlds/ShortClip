@@ -22,17 +22,14 @@ public class JoinRoomListener extends ClickListener {
         System.out.println("Join room clicked. Sending message...");
 
         try {
-            byte[] roomID = textField.getText().getBytes("US-ASCII");
+            String roomID = textField.getText();
 
-            if (roomID.length == 8) {
-                for (byte singleByte : roomID) {
-                    System.out.print(singleByte + " ");
-                }
-                System.out.println("");
+            if (roomID.length() == 8) {
+                System.out.println("Join room ID: " + roomID);
 
                 NetworkMessage message = new NetworkMessage();
                 message.build(0, 1, 8);
-                message.writeCore(roomID, 0);
+                message.writeStr(roomID);
 
                 initHandler.writeMessage(message);
             } else {

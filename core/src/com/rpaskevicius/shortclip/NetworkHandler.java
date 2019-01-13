@@ -1,6 +1,5 @@
 package com.rpaskevicius.shortclip;
 
-import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.net.Socket;
 
 import java.io.IOException;
@@ -48,7 +47,7 @@ public abstract class NetworkHandler {
             if (socket.getInputStream().available() >= message.getLength()) {
                 socket.getInputStream().read(message.getData(), 0, message.getLength());
 
-                System.out.println("Received data: " + message.getAction() + " " + message.getParam() + " core: " + message.readCore(message.getLength() - 2));
+                System.out.println("Received data: " + message.getAction() + " " + message.getParam() + " debug: " + message.debug(message.getLength() - 2));
 
                 handleMessage();
 

@@ -21,14 +21,14 @@ public class DataHandler extends NetworkHandler {
             if (param == 0) {
                 //create new node
 
-                String nodeID = message.readCore(8);
+                String nodeID = message.readStr(8);
 
                 System.out.println("New node ID: " + nodeID);
 
-                System.out.println("Debug core: " + message.debugCore(17));
+                System.out.println("Debug: " + message.debug(17));
 
-                int x = SerialUtils.arrayToInt(message.getCore(8,4));
-                int y = SerialUtils.arrayToInt(message.getCore(12,4));
+                int x = message.readInt(8);
+                int y = message.readInt(12);
 
                 System.out.println("Received message to create new node. x: " + x + " y: " + y);
 
@@ -38,14 +38,14 @@ public class DataHandler extends NetworkHandler {
             } else if (param == 1) {
                 //update existing node position
 
-                String nodeID = message.readCore(8);
+                String nodeID = message.readStr(8);
 
                 System.out.println("Existing node ID: " + nodeID);
 
-                System.out.println("Debug core: " + message.debugCore(17));
+                System.out.println("Debug: " + message.debug(17));
 
-                int x = SerialUtils.arrayToInt(message.getCore(8,4));
-                int y = SerialUtils.arrayToInt(message.getCore(12,4));
+                int x = message.readInt(8);
+                int y = message.readInt(12);
 
                 System.out.println("Received message to update existing node position. x: " + x + " y: " + y);
 
@@ -68,13 +68,13 @@ public class DataHandler extends NetworkHandler {
             } else if (param == 2) {
                 //update existing node sound
 
-                String nodeID = message.readCore(8);
+                String nodeID = message.readStr(8);
 
                 System.out.println("Existing node ID: " + nodeID);
 
-                System.out.println("Debug core: " + message.debugCore(17));
+                System.out.println("Debug: " + message.debug(17));
 
-                byte sound = message.getByte(16);
+                byte sound = message.readByte(16);
 
                 System.out.println("Received message to update existing node sound. sound: " + sound);
 

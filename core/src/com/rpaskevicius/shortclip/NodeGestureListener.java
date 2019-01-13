@@ -77,12 +77,12 @@ public class NodeGestureListener extends ActorGestureListener {
         //send the new position to the server
         NetworkMessage message = new NetworkMessage();
         message.build(0, 1, 16);
-        message.writeID(nodeActor.getNodeID());
-        message.writeCore(SerialUtils.intToArray((int)newX), 8);
-        message.writeCore(SerialUtils.intToArray((int)newY), 12);
+        message.writeStr(nodeActor.getNodeID());
+        message.writeInt((int)newX, 8);
+        message.writeInt((int)newY, 12);
 
-        System.out.println("Sending message to update node position. Core: ");
-        System.out.println(message.debugCore(16));
+        System.out.println("Sending message to update node position. Debug: ");
+        System.out.println(message.debug(16));
 
         currentScreen.getDataHandler().writeMessage(message);
 

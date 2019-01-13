@@ -32,11 +32,11 @@ public class AssetListListener extends ClickListener {
         //TODO send the change to the server
         NetworkMessage message = new NetworkMessage();
         message.build(0, 2, 9);
-        message.writeID(nodeActor.getNodeID());
-        message.writeCore(new byte[] {(byte) list.getSelectedIndex()}, 8);
+        message.writeStr(nodeActor.getNodeID());
+        message.writeByte(list.getSelectedIndex(), 8);
 
-        System.out.println("Sending message to update node sound. Core: ");
-        System.out.println(message.debugCore(9));
+        System.out.println("Sending message to update node sound. Debug: ");
+        System.out.println(message.debug(9));
 
         currentScreen.getDataHandler().writeMessage(message);
 

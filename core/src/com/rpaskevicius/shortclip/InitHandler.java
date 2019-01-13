@@ -20,7 +20,7 @@ public class InitHandler extends NetworkHandler {
             if (param == 0) {
                 //new room created successfully
 
-                String roomID = message.readCore(8);
+                String roomID = message.readStr(8);
                 System.out.println("Room success. Room ID: " + roomID);
 
                 launchShortClip(roomID);
@@ -28,7 +28,7 @@ public class InitHandler extends NetworkHandler {
             } else if (param == 1) {
                 //existing room joined successfully
 
-                String roomID = message.readCore(8);
+                String roomID = message.readStr(8);
                 System.out.println("Room success. Room ID: " + roomID);
 
                 launchShortClip(roomID);

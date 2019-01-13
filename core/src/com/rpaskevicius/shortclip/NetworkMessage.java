@@ -31,59 +31,64 @@ public class NetworkMessage {
     public byte[] getHeader() { return this.header; }
     public byte[] getData() { return this.data; }
 
-    public void writeHeader(byte[] array) {
-        for (int i = 0; i < 2; i++) {
-            this.header[i] = array[i];
-        }
-    }
+    public void writeStr(String str) { writeStr(str, 0); }
 
-    public void writeData(byte[] array) {
-        for (int i = 0; i < array.length; i++) {
-            this.data[i] = array[i];
-        }
-    }
-
-    public void writeCore(byte[] array, int offset) {
-        for (int i = 0; i < array.length; i++) {
-            this.data[i + 2 + offset] = array[i];
-        }
-    }
-
-    public String readCore(int length) {
-        String output = "";
-
-        for (int i = 0; i < length; i++) {
-            output += (char)(this.data[i + 2]);
-        }
-
-        return output;
-    }
-
-    public String debugCore(int length) {
-        String output = "";
-
-        for (int i = 0; i < length; i++) {
-            output += (int)(this.data[i + 2]) + " ";
-        }
-
-        return output;
-    }
-
-    public void writeID(String ID) {
+    public void writeStr(String str, int position) {
         try {
-            byte[] roomID = ID.getBytes("US-ASCII");
-            writeCore(roomID, 0);
+            byte[] arr = str.getBytes("US-ASCII");
+
+            for (int i = 0; i < arr.length; i++) {
+                this.data[2 + position + i] = arr[i];
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public byte getByte(int position) {
-        return this.data[0 + 2 + position];
+    public String readStr(int length) { return readStr(length, 0); }
+
+    public String readStr(int length, int position) {
+        String str = "";
+
+        for (int i = 0; i < length; i++) {
+            str += (char)(this.data[2 + position + i]);
+        }
+
+        return str;
     }
 
-    public byte[] getCore(int start, int length) {
-        return Arrays.copyOfRange(this.data, 2 + start, 2 + start + length);
+    public void writeInt(int num, int position) {
+        this.data[2 + position + 0] = (byte)(num >> 24);
+        this.data[2 + position + 1] = (byte)(num >> 16);
+        this.data[2 + position + 2] = (byte)(num >> 8);
+        this.data[2 + position + 3] = (byte) num;
+    }
+
+    public int readInt(int position) {
+        return this.data[2 + position + 0] << 24 |
+                (this.data[2 + position + 1] & 0xFF) << 16 |
+                (this.data[2 + position + 2] & 0xFF) << 8 |
+                (this.data[2 + position + 3] & 0xFF);
+    }
+
+    public void writeByte(int b, int position) { writeByte((byte) b, position); }
+
+    public void writeByte(byte b, int position) {
+        this.data[2 + position] = b;
+    }
+
+    public byte readByte(int position) {
+        return this.data[2 + position];
+    }
+
+    public String debug(int coreLength) {
+        String output = "";
+
+        for (int i = 0; i < coreLength; i++) {
+            output += (this.data[i + 2] & 0xFF) + " ";
+        }
+
+        return output;
     }
 
     public void setLength(byte length) { this.length = length; }
