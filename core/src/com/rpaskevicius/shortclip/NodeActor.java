@@ -19,6 +19,8 @@ public class NodeActor extends Actor {
 
     private String nodeID;
 
+    private NodeGestureListener nodeGestureListener;
+
     public NodeActor(String nodeID, float x, float y, String textureName, String soundName, AssetManager assetManager, Table centerUI, ShortClip currentScreen) {
         this.nodeID = nodeID;
         this.assetManager = assetManager;
@@ -32,7 +34,8 @@ public class NodeActor extends Actor {
 
         setBounds(getX(), getY(), texture.getWidth(), texture.getHeight());
 
-        addListener(new NodeGestureListener(this, assetManager, centerUI, currentScreen));
+        this.nodeGestureListener = new NodeGestureListener(this, assetManager, centerUI, currentScreen);
+        addListener(this.nodeGestureListener);
     }
 
     public void play(){
@@ -73,11 +76,14 @@ public class NodeActor extends Actor {
     }
 
     public void setSound(String sound) {
-        System.out.println("inside setSound: " + sound + " " + this.sound + " " + this.assetManager);
         this.sound = assetManager.get(sound, Sound.class);
     }
 
     public String getNodeID() {
         return nodeID;
+    }
+
+    public NodeGestureListener getNodeGestureListener() {
+        return nodeGestureListener;
     }
 }

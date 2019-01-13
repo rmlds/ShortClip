@@ -84,10 +84,13 @@ public class DataHandler extends NetworkHandler {
                         System.out.println("actor instanceof NodeActor. nodeID: " + ((NodeActor) actor).getNodeID());
 
                         if (((NodeActor) actor).getNodeID().equals(nodeID)) {
-                            System.out.println("Found node. setSound: " + sound);
-                            ((NodeActor) actor).setSound(AssetMap.getNodeSoundString((int)sound));
+                            String soundString = AssetMap.getNodeSoundString((int)sound);
 
-                            //TODO list.setSelected("kick-01.wav");
+                            System.out.println("Found node. setSound: " + sound + " -> " + soundString);
+
+                            ((NodeActor) actor).setSound(soundString);
+
+                            ((NodeActor) actor).getNodeGestureListener().getList().setSelected(soundString);
 
                             return;
                         }

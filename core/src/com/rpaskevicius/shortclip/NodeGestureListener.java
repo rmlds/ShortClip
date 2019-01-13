@@ -137,4 +137,8 @@ public class NodeGestureListener extends ActorGestureListener {
     public void setSelectorEnabled(boolean state) {
         this.selectorEnabled = state;
     }
+
+    public List<String> getList() {
+        return list;
+    }
 }
