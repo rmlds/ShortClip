@@ -134,7 +134,7 @@ public class ShortClip extends ScreenAdapter {
 		Button addNode = new Button(skin, "ui-add-node");
 		Button addSequencer = new Button(skin, "ui-add-sequencer");
 
-		addNode.addListener(new NodeButtonListener(stage, assetManager, centerUI));
+		addNode.addListener(new NodeButtonListener(this, stage, assetManager, centerUI));
 		addSequencer.addListener(new SequencerButtonListener(stage, time));
 
 		lowerUI.add(addSequencer);
@@ -151,5 +151,21 @@ public class ShortClip extends ScreenAdapter {
 		upperUI.add(roomLabel);
 
 		return upperUI;
+	}
+
+	public DataHandler getDataHandler() {
+		return this.dataHandler;
+	}
+
+	public AssetManager getAssetManager() {
+		return this.assetManager;
+	}
+
+	public Stage getStage() {
+		return this.stage;
+	}
+
+	public Table getCenterUI() {
+		return centerUI;
 	}
 }

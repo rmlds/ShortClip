@@ -1,5 +1,7 @@
 package com.rpaskevicius.shortclip;
 
+import java.util.Arrays;
+
 public class NetworkMessage {
 
     private byte[] header = new byte[2];
@@ -41,9 +43,9 @@ public class NetworkMessage {
         }
     }
 
-    public void writeCore(byte[] array) {
+    public void writeCore(byte[] array, int offset) {
         for (int i = 0; i < array.length; i++) {
-            this.data[i + 2] = array[i];
+            this.data[i + 2 + offset] = array[i];
         }
     }
 
@@ -55,6 +57,20 @@ public class NetworkMessage {
         }
 
         return output;
+    }
+
+    public String debugCore(int length) {
+        String output = "";
+
+        for (int i = 0; i < length; i++) {
+            output += (int)(this.data[i + 2]) + " ";
+        }
+
+        return output;
+    }
+
+    public byte[] getCore(int start, int length) {
+        return Arrays.copyOfRange(this.data, 2 + start, 2 + start + length);
     }
 
     public void setLength(byte length) { this.length = length; }

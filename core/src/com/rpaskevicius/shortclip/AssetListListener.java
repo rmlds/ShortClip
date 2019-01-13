@@ -31,6 +31,6 @@ public class AssetListListener extends ClickListener {
 
         centerUI.removeActor(scrollPane);
 
-        nodeGestureListener.setSelectorEnabled(false);
+        nodeGestureListener.setSelectorEnabled(false); //prevent the user from adding the selector multiple times
     }
 }

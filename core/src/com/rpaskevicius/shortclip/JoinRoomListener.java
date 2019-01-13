@@ -32,7 +32,7 @@ public class JoinRoomListener extends ClickListener {
 
                 NetworkMessage message = new NetworkMessage();
                 message.build(0, 1, 8);
-                message.writeCore(roomID);
+                message.writeCore(roomID, 0);
 
                 initHandler.writeMessage(message);
             } else {
