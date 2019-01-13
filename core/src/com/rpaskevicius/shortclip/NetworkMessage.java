@@ -78,6 +78,10 @@ public class NetworkMessage {
         }
     }
 
+    public byte getByte(int position) {
+        return this.data[0 + 2 + position];
+    }
+
     public byte[] getCore(int start, int length) {
         return Arrays.copyOfRange(this.data, 2 + start, 2 + start + length);
     }

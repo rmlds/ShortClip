@@ -68,6 +68,34 @@ public class DataHandler extends NetworkHandler {
             } else if (param == 2) {
                 //update existing node sound
 
+                String nodeID = message.readCore(8);
+
+                System.out.println("Existing node ID: " + nodeID);
+
+                System.out.println("Debug core: " + message.debugCore(17));
+
+                byte sound = message.getByte(16);
+
+                System.out.println("Received message to update existing node sound. sound: " + sound);
+
+                for (Actor actor : currentScreen.getStage().getActors()) {
+                    if (actor instanceof NodeActor) {
+
+                        System.out.println("actor instanceof NodeActor. nodeID: " + ((NodeActor) actor).getNodeID());
+
+                        if (((NodeActor) actor).getNodeID().equals(nodeID)) {
+                            System.out.println("Found node. setSound: " + sound);
+                            ((NodeActor) actor).setSound(AssetMap.getNodeSoundString((int)sound));
+
+                            //TODO list.setSelected("kick-01.wav");
+
+                            return;
+                        }
+                    }
+                }
+
+                System.out.println("Node not found. nodeID: " + nodeID);
+
             } else if (param == 44) {
                 //node not found
 

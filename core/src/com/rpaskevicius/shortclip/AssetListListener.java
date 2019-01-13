@@ -14,7 +14,10 @@ public class AssetListListener extends ClickListener {
     private ScrollPane scrollPane;
     private NodeGestureListener nodeGestureListener;
 
-    public AssetListListener(List<String> list, NodeActor nodeActor, Table centerUI, ScrollPane scrollPane, NodeGestureListener nodeGestureListener) {
+    private ShortClip currentScreen;
+
+    public AssetListListener(ShortClip currentScreen, List<String> list, NodeActor nodeActor, Table centerUI, ScrollPane scrollPane, NodeGestureListener nodeGestureListener) {
+        this.currentScreen = currentScreen;
         this.list = list;
         this.nodeActor = nodeActor;
         this.centerUI = centerUI;
@@ -24,6 +27,20 @@ public class AssetListListener extends ClickListener {
 
     @Override
     public void clicked(InputEvent event, float x, float y) {
+        System.out.println("AssetListListener clicked " + list.getSelectedIndex() + " -> " + list.getSelected());
+
+        //TODO send the change to the server
+        NetworkMessage message = new NetworkMessage();
+        message.build(0, 2, 9);
+        message.writeID(nodeActor.getNodeID());
+        message.writeCore(new byte[] {(byte) list.getSelectedIndex()}, 8);
+
+        System.out.println("Sending message to update node sound. Core: ");
+        System.out.println(message.debugCore(9));
+
+        currentScreen.getDataHandler().writeMessage(message);
+
+        //Handle the change
         String sound = list.getSelected();
 
         System.out.println(sound);

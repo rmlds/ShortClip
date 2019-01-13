@@ -21,16 +21,18 @@ public class NodeActor extends Actor {
 
     public NodeActor(String nodeID, float x, float y, String textureName, String soundName, AssetManager assetManager, Table centerUI, ShortClip currentScreen) {
         this.nodeID = nodeID;
+        this.assetManager = assetManager;
+
         texture = new Texture(Gdx.files.internal(textureName));
-        sound = Gdx.audio.newSound(Gdx.files.internal(soundName));
+        //sound = Gdx.audio.newSound(Gdx.files.internal(soundName));
+        System.out.println("soundName: " + soundName);
+        setSound(soundName);
 
         setPosition(x, y);
 
         setBounds(getX(), getY(), texture.getWidth(), texture.getHeight());
 
         addListener(new NodeGestureListener(this, assetManager, centerUI, currentScreen));
-
-        this.assetManager = assetManager;
     }
 
     public void play(){
@@ -71,6 +73,7 @@ public class NodeActor extends Actor {
     }
 
     public void setSound(String sound) {
+        System.out.println("inside setSound: " + sound + " " + this.sound + " " + this.assetManager);
         this.sound = assetManager.get(sound, Sound.class);
     }
 

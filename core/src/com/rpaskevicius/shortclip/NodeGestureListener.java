@@ -60,7 +60,7 @@ public class NodeGestureListener extends ActorGestureListener {
 
         scrollPane = new ScrollPane(list, skin);
 
-        list.addListener(new AssetListListener(list, this.nodeActor, this.centerUI, scrollPane, this)); //TODO wtf is this constructor
+        list.addListener(new AssetListListener(currentScreen, list, this.nodeActor, this.centerUI, scrollPane, this)); //TODO wtf is this constructor
 
     }
 
@@ -74,7 +74,7 @@ public class NodeGestureListener extends ActorGestureListener {
         nodeActor.setPosition(newX, newY);
         System.out.println("Node: " + nodeActor.getX() + " " + nodeActor.getY());
 
-        //TODO send the new position to the server
+        //send the new position to the server
         NetworkMessage message = new NetworkMessage();
         message.build(0, 1, 16);
         message.writeID(nodeActor.getNodeID());
