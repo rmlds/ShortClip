@@ -17,7 +17,10 @@ public class NodeActor extends Actor {
 
     private AssetManager assetManager;
 
-    public NodeActor(float x, float y, String textureName, String soundName, AssetManager assetManager, Table centerUI) {
+    private String nodeID;
+
+    public NodeActor(String nodeID, float x, float y, String textureName, String soundName, AssetManager assetManager, Table centerUI, ShortClip currentScreen) {
+        this.nodeID = nodeID;
         texture = new Texture(Gdx.files.internal(textureName));
         sound = Gdx.audio.newSound(Gdx.files.internal(soundName));
 
@@ -25,7 +28,7 @@ public class NodeActor extends Actor {
 
         setBounds(getX(), getY(), texture.getWidth(), texture.getHeight());
 
-        addListener(new NodeGestureListener(this, assetManager, centerUI));
+        addListener(new NodeGestureListener(this, assetManager, centerUI, currentScreen));
 
         this.assetManager = assetManager;
     }
@@ -69,5 +72,9 @@ public class NodeActor extends Actor {
 
     public void setSound(String sound) {
         this.sound = assetManager.get(sound, Sound.class);
+    }
+
+    public String getNodeID() {
+        return nodeID;
     }
 }

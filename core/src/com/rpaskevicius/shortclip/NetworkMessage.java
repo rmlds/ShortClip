@@ -69,6 +69,15 @@ public class NetworkMessage {
         return output;
     }
 
+    public void writeID(String ID) {
+        try {
+            byte[] roomID = ID.getBytes("US-ASCII");
+            writeCore(roomID, 0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public byte[] getCore(int start, int length) {
         return Arrays.copyOfRange(this.data, 2 + start, 2 + start + length);
     }

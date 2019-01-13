@@ -28,11 +28,13 @@ public class NodeGestureListener extends ActorGestureListener {
     private final Table centerUI;
     private boolean selectorEnabled;
 
+    private ShortClip currentScreen;
 
-    public NodeGestureListener(final NodeActor nodeActor, AssetManager assetManager, Table centerUI) {
+    public NodeGestureListener(final NodeActor nodeActor, AssetManager assetManager, Table centerUI, ShortClip currentScreen) {
         this.nodeActor = nodeActor;
         this.assetManager = assetManager;
         this.centerUI = centerUI;
+        this.currentScreen = currentScreen;
 
         //sounds should be the same as in AssetLoadingScreen //TODO should be static
         sounds = new String[] {
@@ -64,9 +66,25 @@ public class NodeGestureListener extends ActorGestureListener {
 
     @Override
     public void pan(InputEvent event, float x, float y, float deltaX, float deltaY) {
+
+        float newX = nodeActor.getX() + deltaX;
+        float newY = nodeActor.getY() + deltaY;
+
         //Move the node
-        nodeActor.setPosition(nodeActor.getX() + deltaX, nodeActor.getY() + deltaY);
+        nodeActor.setPosition(newX, newY);
         System.out.println("Node: " + nodeActor.getX() + " " + nodeActor.getY());
+
+        //TODO send the new position to the server
+        NetworkMessage message = new NetworkMessage();
+        message.build(0, 1, 16);
+        message.writeID(nodeActor.getNodeID());
+        message.writeCore(SerialUtils.intToArray((int)newX), 8);
+        message.writeCore(SerialUtils.intToArray((int)newY), 12);
+
+        System.out.println("Sending message to update node position. Core: ");
+        System.out.println(message.debugCore(16));
+
+        currentScreen.getDataHandler().writeMessage(message);
 
         //Moving the node also updates lineEnd position
         if (nodeActor.hasSequencer() && nodeActor.getSequencer().hasLine()) {
