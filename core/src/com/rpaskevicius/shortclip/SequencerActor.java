@@ -35,7 +35,7 @@ public class SequencerActor extends Actor {
 
     private String sequencerID;
 
-    public SequencerActor(String sequencerID, float x, float y, String textureName, int stepCount, float panelWidth, Stage stage) {
+    public SequencerActor(String sequencerID, float x, float y, String textureName, int stepCount, float panelWidth, Stage stage, ShortClip currentScreen) {
         this.sequencerID = sequencerID;
         texture = new Texture(Gdx.files.internal(textureName));
 
@@ -43,7 +43,7 @@ public class SequencerActor extends Actor {
 
         setBounds(getX(), getY(), texture.getWidth(), texture.getHeight());
 
-        addListener(new SequencerGestureListener(this));
+        addListener(new SequencerGestureListener(currentScreen, this));
 
         this.stage = stage;
 

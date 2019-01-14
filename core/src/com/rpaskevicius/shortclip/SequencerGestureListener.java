@@ -12,7 +12,10 @@ public class SequencerGestureListener extends ActorGestureListener {
     private boolean initiatingConnection;
     private boolean hasConnection;
 
-    public SequencerGestureListener(SequencerActor sequencerActor) {
+    private ShortClip currentScreen;
+
+    public SequencerGestureListener(ShortClip currentScreen, SequencerActor sequencerActor) {
+        this.currentScreen = currentScreen;
         this.sequencerActor = sequencerActor;
     }
 
@@ -40,7 +43,22 @@ public class SequencerGestureListener extends ActorGestureListener {
 
         //If the effective area was clicked, move the object
         if (x < sequencerActor.getEffectiveArea() && !initiatingConnection) {
-            sequencerActor.setPosition(sequencerActor.getX() + deltaX, sequencerActor.getY() + deltaY);
+            float newX = sequencerActor.getX() + deltaX;
+            float newY = sequencerActor.getY() + deltaY;
+
+            sequencerActor.setPosition(newX, newY);
+
+            //TODO send the new position to the server ~~~~~~~~~~~~~
+            NetworkMessage message = new NetworkMessage();
+            message.build(1, 1, 16);
+            message.writeStr(sequencerActor.getSequencerID());
+            message.writeInt((int)newX, 8);
+            message.writeInt((int)newY, 12);
+
+            System.out.println("Sending message to update sequencer position. Debug: ");
+            System.out.println(message.debug(16));
+
+            currentScreen.getDataHandler().writeMessage(message);
 
             //If there is a line, we also need to update its starting position
             if (sequencerActor.hasLine()) {

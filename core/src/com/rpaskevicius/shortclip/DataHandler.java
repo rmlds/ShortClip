@@ -122,12 +122,40 @@ public class DataHandler extends NetworkHandler {
 
                 System.out.println("Received message to create new sequencer. x: " + x + " y: " + y);
 
-                SequencerActor sequencer = new SequencerActor(sequencerID, x, y, "sequencer-grey-w-panel-white.png", 16, 32, currentScreen.getStage());
+                SequencerActor sequencer = new SequencerActor(sequencerID, x, y, "sequencer-grey-w-panel-white.png", 16, 32, currentScreen.getStage(), currentScreen);
 
                 currentScreen.getTimeDispatcher().addListener(sequencer);
                 currentScreen.getStage().addActor(sequencer);
-            }
+            } else if (param == 1) {
+                //update existing sequencer position
 
+                String sequencerID = message.readStr(8);
+
+                System.out.println("Existing sequencer ID: " + sequencerID);
+
+                System.out.println("Debug: " + message.debug(18));
+
+                int x = message.readInt(8);
+                int y = message.readInt(12);
+
+                System.out.println("Received message to update existing sequencer position. x: " + x + " y: " + y);
+
+                for (Actor actor : currentScreen.getStage().getActors()) {
+                    if (actor instanceof SequencerActor) {
+
+                        System.out.println("actor instanceof SequencerActor. sequencerID: " + ((SequencerActor) actor).getSequencerID());
+
+                        if (((SequencerActor) actor).getSequencerID().equals(sequencerID)) {
+                            System.out.println("Found sequencer. setPosition x: " + x + " y: " + y);
+                            actor.setPosition(x, y);
+
+                            return;
+                        }
+                    }
+                }
+
+                System.out.println("Sequencer not found. sequencerID: " + sequencerID);
+            }
         } else if (action == 40) {
             //user requested an invalid action
         } else {
