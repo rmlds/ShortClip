@@ -154,6 +154,17 @@ public class SequencerGestureListener extends ActorGestureListener {
                     node.setSequencer(sequencerActor);
                     sequencerActor.setNode(node);
 
+                    //TODO send the references to the server
+                    NetworkMessage message = new NetworkMessage();
+                    message.build(1, 3, 16);
+                    message.writeStr(sequencerActor.getSequencerID());
+                    message.writeStr(node.getNodeID(), 8);
+
+                    System.out.println("Sending message to link to node. Debug: ");
+                    System.out.println(message.debug(16));
+
+                    currentScreen.getDataHandler().writeMessage(message);
+
                     //Draw a permanent line
                     Vector2 lineStart = sequencerActor.getConnectionPoint();
                     Vector2 lineEnd = sequencerActor.getNode().getConnectionPoint();

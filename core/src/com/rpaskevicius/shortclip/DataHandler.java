@@ -184,6 +184,45 @@ public class DataHandler extends NetworkHandler {
                 }
 
                 System.out.println("Sequencer not found. sequencerID: " + sequencerID);
+            } else if (param == 3) {
+                //create sequencer link
+
+                String sequencerID = message.readStr(8);
+                String nodeID = message.readStr(8, 32);
+
+                System.out.println("Existing sequencer ID: " + sequencerID);
+
+                System.out.println("Debug: " + message.debug(40));
+
+                System.out.println("Received message to create sequencer link.");
+
+                for (Actor sequencer : currentScreen.getStage().getActors()) {
+                    if (sequencer instanceof SequencerActor) {
+
+                        System.out.println("actor instanceof SequencerActor. sequencerID: " + ((SequencerActor) sequencer).getSequencerID());
+
+                        if (((SequencerActor) sequencer).getSequencerID().equals(sequencerID)) {
+                            System.out.println("Found sequencer. Looking for node...");
+
+                            for (Actor node : currentScreen.getStage().getActors()) {
+                                if (node instanceof NodeActor) {
+
+                                    if (((NodeActor) node).getNodeID().equals(nodeID)) {
+                                        System.out.println("Found node! Making link...");
+
+                                        //((NodeActor) node).setSequencer((SequencerActor) sequencer);
+                                        ((SequencerActor) sequencer).setNode((NodeActor) node);
+
+                                    }
+                                }
+                            }
+
+                            return;
+                        }
+                    }
+                }
+
+                System.out.println("Sequencer not found. sequencerID: " + sequencerID);
             }
         } else if (action == 40) {
             //user requested an invalid action
