@@ -155,6 +155,35 @@ public class DataHandler extends NetworkHandler {
                 }
 
                 System.out.println("Sequencer not found. sequencerID: " + sequencerID);
+            } else if (param == 2) {
+                //update existing sequencer steps
+
+                String sequencerID = message.readStr(8);
+
+                System.out.println("Existing sequencer ID: " + sequencerID);
+
+                System.out.println("Debug: " + message.debug(32));
+
+                boolean[] steps = message.readBoolArr(16, 16);
+
+                System.out.println("Received message to update existing sequencer steps.");
+
+                for (Actor actor : currentScreen.getStage().getActors()) {
+                    if (actor instanceof SequencerActor) {
+
+                        System.out.println("actor instanceof SequencerActor. sequencerID: " + ((SequencerActor) actor).getSequencerID());
+
+                        if (((SequencerActor) actor).getSequencerID().equals(sequencerID)) {
+                            System.out.println("Found sequencer. setSteps...");
+
+                            ((SequencerActor) actor).setSteps(steps);
+
+                            return;
+                        }
+                    }
+                }
+
+                System.out.println("Sequencer not found. sequencerID: " + sequencerID);
             }
         } else if (action == 40) {
             //user requested an invalid action

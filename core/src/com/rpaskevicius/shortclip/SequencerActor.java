@@ -11,6 +11,7 @@ public class SequencerActor extends Actor {
     private Texture texture;
 
     private int stepCount;
+
     private boolean[] steps;
     private Texture stepTexture = new Texture(Gdx.files.internal("pad-purple.png"));
 
@@ -177,5 +178,15 @@ public class SequencerActor extends Actor {
 
     public String getSequencerID() {
         return this.sequencerID;
+    }
+
+    public boolean[] getSteps() {
+        return this.steps;
+    }
+
+    public void setSteps(boolean[] steps) {
+        for (int i = 0; i < steps.length; i++) {
+            this.steps[i] = steps[i];
+        }
     }
 }

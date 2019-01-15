@@ -31,6 +31,30 @@ public class NetworkMessage {
     public byte[] getHeader() { return this.header; }
     public byte[] getData() { return this.data; }
 
+    public void writeBoolArr(boolean[] arr, int position) {
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] == true) {
+                this.data[2 + position + i] = 1;
+            } else {
+                this.data[2 + position + i] = 0;
+            }
+        }
+    }
+
+    public boolean[] readBoolArr(int length, int position) {
+        boolean[] arr = new boolean[length];
+
+        for (int i = 0; i < length; i++) {
+            if (this.data[2 + position + i] == 1) {
+                arr[i] = true;
+            } else {
+                arr[i] = false;
+            }
+        }
+
+        return arr;
+    }
+
     public void writeStr(String str) { writeStr(str, 0); }
 
     public void writeStr(String str, int position) {

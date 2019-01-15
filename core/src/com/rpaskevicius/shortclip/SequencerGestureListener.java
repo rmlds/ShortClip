@@ -34,6 +34,17 @@ public class SequencerGestureListener extends ActorGestureListener {
             }
 
             System.out.println("Tap: " + x + " " + y + " " + stepIndex);
+
+            //TODO send steps to server
+            NetworkMessage message = new NetworkMessage();
+            message.build(1, 2, 24);
+            message.writeStr(sequencerActor.getSequencerID());
+            message.writeBoolArr(sequencerActor.getSteps(), 8);
+
+            System.out.println("Sending message to update sequencer steps. Debug: ");
+            System.out.println(message.debug(24));
+
+            currentScreen.getDataHandler().writeMessage(message);
         }
     }
 
