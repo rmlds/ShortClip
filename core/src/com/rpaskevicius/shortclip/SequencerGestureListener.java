@@ -109,10 +109,7 @@ public class SequencerGestureListener extends ActorGestureListener {
 
             if (hitResult == null) {
                 //No actor was hit. Clear node reference if it exists.
-
-                //TODO send over the network
-
-                sequencerActor.clearNode();
+                clearNode();
 
             } else {
                 //An actor was hit.
@@ -137,10 +134,7 @@ public class SequencerGestureListener extends ActorGestureListener {
 
                 } else {
                     //The actor is not NodeActor. Pretend as if no actor was hit and clear node reference.
-
-                    //TODO send over the network
-
-                    sequencerActor.clearNode();
+                    clearNode();
                 }
             }
 
@@ -154,5 +148,18 @@ public class SequencerGestureListener extends ActorGestureListener {
 
     public Vector2 getCursorPosition() {
         return cursorPosition;
+    }
+
+    private void clearNode() {
+        sequencerActor.clearNode();
+
+        NetworkMessage message = new NetworkMessage();
+        message.build(1, 4, 8);
+        message.writeStr(sequencerActor.getSequencerID());
+
+        System.out.println("Sending message to remove link. Debug: ");
+        System.out.println(message.debug(8));
+
+        currentScreen.getDataHandler().writeMessage(message);
     }
 }

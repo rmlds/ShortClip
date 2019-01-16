@@ -111,6 +111,15 @@ public class DataHandler extends NetworkHandler {
 
                 if ((sequencer != null) && (node != null)) { sequencer.setNode(node); }
 
+            } else if (param == 4) {
+                //clear sequencer link
+
+                String sequencerID = message.readStr(8);
+
+                SequencerActor sequencer = currentScreen.getSequencerByID(sequencerID);
+
+                if (sequencer != null) { sequencer.clearNode(); }
+
             } else if (param == 44) {
                 //sequencer not found
             } else if (param == 40) {
