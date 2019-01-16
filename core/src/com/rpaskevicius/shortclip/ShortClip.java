@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.net.Socket;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -171,6 +172,30 @@ public class ShortClip extends ScreenAdapter {
 
 	public TimeDispatcher getTimeDispatcher() {
 		return time;
+	}
+
+	public NodeActor getNodeByID(String nodeID) {
+		for (Actor actor : stage.getActors()) {
+			if (actor instanceof NodeActor) {
+				if (((NodeActor) actor).getNodeID().equals(nodeID)) {
+					return ((NodeActor) actor);
+				}
+			}
+		}
+
+		return null;
+	}
+
+	public SequencerActor getSequencerByID(String sequencerID) {
+		for (Actor actor : stage.getActors()) {
+			if (actor instanceof SequencerActor) {
+				if (((SequencerActor) actor).getSequencerID().equals(sequencerID)) {
+					return ((SequencerActor) actor);
+				}
+			}
+		}
+
+		return null;
 	}
 
 }
