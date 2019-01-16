@@ -13,8 +13,6 @@ public class NodeActor extends Actor {
     private Texture texture;
     private Sound sound;
 
-    private SequencerActor sequencer;
-
     private AssetManager assetManager;
 
     private String nodeID;
@@ -26,8 +24,7 @@ public class NodeActor extends Actor {
         this.assetManager = assetManager;
 
         texture = new Texture(Gdx.files.internal(textureName));
-        //sound = Gdx.audio.newSound(Gdx.files.internal(soundName));
-        System.out.println("soundName: " + soundName);
+
         setSound(soundName);
 
         setPosition(x, y);
@@ -50,22 +47,6 @@ public class NodeActor extends Actor {
     @Override
     public void draw (Batch batch, float parentAlpha) {
         batch.draw(texture, getX(), getY());
-    }
-
-    public void setSequencer(SequencerActor sequencer) {
-        this.sequencer = sequencer;
-    }
-
-    public void clearSequencer() {
-        this.sequencer = null;
-    }
-
-    public boolean hasSequencer() {
-        return (this.sequencer != null);
-    }
-
-    public SequencerActor getSequencer() {
-        return this.sequencer;
     }
 
     public Vector2 getConnectionPoint() {

@@ -86,14 +86,6 @@ public class NodeGestureListener extends ActorGestureListener {
 
         currentScreen.getDataHandler().writeMessage(message);
 
-        //Moving the node also updates lineEnd position
-        if (nodeActor.hasSequencer() && nodeActor.getSequencer().hasLine()) {
-
-            Vector2 lineEnd = nodeActor.getConnectionPoint();
-
-            nodeActor.getSequencer().getLine().setEnd(lineEnd);
-        }
-
         event.handle(); //inform Stage that this event has been handled
     }
 

@@ -121,11 +121,9 @@ public class SequencerActor extends Actor {
 
     public void setNode(NodeActor node) {
         this.node = node;
-        this.node.setSequencer(this); //TODO pretty sure this is a duplicate setter. Revisit SequencerGestureListener
     }
 
     public void clearNode() {
-        this.node.clearSequencer();
         this.node = null;
     }
 
@@ -143,24 +141,6 @@ public class SequencerActor extends Actor {
 
     public float getPanelArea() {
         return panelArea;
-    }
-
-    public void createLine(Vector2 lineStart, Vector2 lineEnd) {
-        line = new LineActor(lineStart, lineEnd, "line-segment.png");
-        stage.addActor(line);
-    }
-
-    public void disposeLine() {
-        line.remove(); // remove the line from stage
-        line = null;
-    }
-
-    public boolean hasLine() {
-        return (this.line != null);
-    }
-
-    public LineActor getLine() {
-        return this.line;
     }
 
     public Vector2 getConnectionPoint() {

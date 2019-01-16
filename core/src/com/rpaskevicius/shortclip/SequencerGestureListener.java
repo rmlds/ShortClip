@@ -7,12 +7,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 
 public class SequencerGestureListener extends ActorGestureListener {
 
+    private ShortClip currentScreen;
+
     private SequencerActor sequencerActor;
 
     private boolean initiatingConnection;
-    private boolean hasConnection;
-
-    private ShortClip currentScreen;
 
     public SequencerGestureListener(ShortClip currentScreen, SequencerActor sequencerActor) {
         this.currentScreen = currentScreen;
@@ -35,7 +34,7 @@ public class SequencerGestureListener extends ActorGestureListener {
 
             System.out.println("Tap: " + x + " " + y + " " + stepIndex);
 
-            //TODO send steps to server
+            //send steps to server
             NetworkMessage message = new NetworkMessage();
             message.build(1, 2, 24);
             message.writeStr(sequencerActor.getSequencerID());
@@ -59,7 +58,9 @@ public class SequencerGestureListener extends ActorGestureListener {
 
             sequencerActor.setPosition(newX, newY);
 
-            //TODO send the new position to the server ~~~~~~~~~~~~~
+            System.out.println("Move actor: " + sequencerActor.getX() + " " + sequencerActor.getY());
+
+            //send the new position to the server
             NetworkMessage message = new NetworkMessage();
             message.build(1, 1, 16);
             message.writeStr(sequencerActor.getSequencerID());
@@ -71,23 +72,8 @@ public class SequencerGestureListener extends ActorGestureListener {
 
             currentScreen.getDataHandler().writeMessage(message);
 
-            //If there is a line, we also need to update its starting position
-            if (sequencerActor.hasLine()) {
-                Vector2 lineStart = sequencerActor.getConnectionPoint();
-
-                sequencerActor.getLine().setStart(lineStart);
-            }
-
-            System.out.println("Move actor: " + sequencerActor.getX() + " " + sequencerActor.getY());
         } else { // outside of effective area
-
-            if (sequencerActor.hasLine()) {
-                //update the existing line
-                Vector2 lineEnd = sequencerActor.localToStageCoordinates(new Vector2(x, y));
-                System.out.println("Update line: " + lineEnd.x + " " + lineEnd.y);
-
-                sequencerActor.getLine().setEnd(lineEnd);
-            }
+            //TODO update connection line
         }
 
         event.handle(); //inform Stage that this event has been handled
@@ -100,14 +86,10 @@ public class SequencerGestureListener extends ActorGestureListener {
         if (x > sequencerActor.getEffectiveArea()) {
             initiatingConnection = true;
 
-            //If there is no line, create it
-            if (!sequencerActor.hasLine()) {
-                Vector2 lineStart = sequencerActor.getConnectionPoint();
-                Vector2 lineEnd = sequencerActor.localToStageCoordinates(new Vector2(x, y));
+            //TODO start drawing connection line
 
-                sequencerActor.createLine(lineStart, lineEnd);
-            }
-
+            //Vector2 lineStart = sequencerActor.getConnectionPoint();
+            //Vector2 lineEnd = sequencerActor.localToStageCoordinates(new Vector2(x, y));
         }
     }
 
@@ -119,42 +101,26 @@ public class SequencerGestureListener extends ActorGestureListener {
         if (initiatingConnection) {
             Vector2 hitPoint = sequencerActor.localToStageCoordinates(new Vector2(x, y));
 
-            Actor hitResult = sequencerActor.getStage().hit(hitPoint.x, hitPoint.y, false); //TODO could getStage() return null?
+            Actor hitResult = sequencerActor.getStage().hit(hitPoint.x, hitPoint.y, false);
 
             if (hitResult == null) {
-                //No actor was hit. Remove the line, and clear references if they exist.
+                //No actor was hit. Clear node reference if it exists.
 
-                sequencerActor.disposeLine();
+                //TODO send over the network
 
-                clearRefsOnSequencer();
+                sequencerActor.clearNode();
+
             } else {
                 //An actor was hit.
 
                 if (hitResult instanceof NodeActor) {
                     NodeActor node = (NodeActor) hitResult;
 
-                    sequencerActor.disposeLine();
-
-                    //If this sequencer had a connection, clear all references
-                    if (sequencerActor.hasNode()) {
-                        //TODO Is this removal actually needed? (when switching from one node to another)
-                        sequencerActor.getNode().clearSequencer();
-                        sequencerActor.clearNode();
-                    } //TODO this awfully looks like clearRefsOnSequencer()
-
-                    //If hitResult node had a connection, clear all references. Also remove line.
-                    if (node.hasSequencer()) {
-                        node.getSequencer().disposeLine();
-
-                        node.getSequencer().clearNode();
-                        node.clearSequencer();
-                    }
-
                     //Assign the new references
-                    node.setSequencer(sequencerActor);
+                    sequencerActor.clearNode();
                     sequencerActor.setNode(node);
 
-                    //TODO send the references to the server
+                    //send the references to the server
                     NetworkMessage message = new NetworkMessage();
                     message.build(1, 3, 16);
                     message.writeStr(sequencerActor.getSequencerID());
@@ -165,30 +131,16 @@ public class SequencerGestureListener extends ActorGestureListener {
 
                     currentScreen.getDataHandler().writeMessage(message);
 
-                    //Draw a permanent line
-                    Vector2 lineStart = sequencerActor.getConnectionPoint();
-                    Vector2 lineEnd = sequencerActor.getNode().getConnectionPoint();
-
-                    sequencerActor.createLine(lineStart, lineEnd);
-
                 } else {
-                    //clearLine(); //TODO will cause NullPointerEx if line does not exist. To fix, create the line in touchDown instead.
-                    sequencerActor.disposeLine();
+                    //The actor is not NodeActor. Pretend as if no actor was hit and clear node reference.
 
-                    clearRefsOnSequencer(); //The actor is not NodeActor. Pretend as if no actor was hit and clear references.
+                    //TODO send over the network
+
+                    sequencerActor.clearNode();
                 }
             }
 
-            //TODO this is a huge mess. clearRefsOnSequencer() and disposeLine() seems to be called in every possible case.
-
             initiatingConnection = false;
-        }
-    }
-
-    private void clearRefsOnSequencer() {
-        if (sequencerActor.hasNode()) {
-            sequencerActor.getNode().clearSequencer();
-            sequencerActor.clearNode();
         }
     }
 
