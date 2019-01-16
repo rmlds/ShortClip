@@ -2,17 +2,11 @@ package com.rpaskevicius.shortclip;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.input.GestureDetector;
-import com.badlogic.gdx.math.Bezier;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Path;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.net.Socket;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -39,7 +33,7 @@ public class ShortClip extends ScreenAdapter {
 
 	private DataHandler dataHandler;
 
-	private Texture lineTexture = new Texture(Gdx.files.internal("line-segment.png"));
+	private ConnectionVisualizer connectionVisualizer;
 
 	public ShortClip(Game launchScreen, AssetManager assetManager, Socket socket, String roomID) {
 		this.assetManager = assetManager;
@@ -80,6 +74,9 @@ public class ShortClip extends ScreenAdapter {
 
 		stageUI.addActor(table);
 		stageUI.setDebugAll(true);
+
+		//Sequencer and node connection visualizer
+		this.connectionVisualizer = new ConnectionVisualizer(this);
 	}
 
 	@Override
@@ -94,10 +91,10 @@ public class ShortClip extends ScreenAdapter {
 		stage.act(deltaTime);
 		stage.draw();
 
+		connectionVisualizer.drawConnections(stage.getBatch());
+
 		stageUI.act(deltaTime);
 		stageUI.draw();
-
-		drawConnections(stage.getBatch());
 
 		time.update();
 	}
@@ -205,76 +202,6 @@ public class ShortClip extends ScreenAdapter {
 		}
 
 		return null;
-	}
-
-	private void drawConnections(Batch batch) {
-		Vector2 start = new Vector2();
-		Vector2 midLower = new Vector2();
-		Vector2 midUpper = new Vector2();
-		Vector2 end = new Vector2();
-
-		Path<Vector2> path = new Bezier<Vector2>(start, midLower, midUpper, end);
-
-		float resolution = 0.01f;
-
-		final Vector2 currentVec = new Vector2();
-		final Vector2 nextVec = new Vector2();
-
-		batch.begin();
-
-		for (Actor actor : stage.getActors()) {
-			if (actor instanceof SequencerActor) {
-				SequencerActor sequencer = (SequencerActor) actor;
-
-				if (sequencer.hasNode()) {
-					NodeActor node = sequencer.getNode();
-
-					Vector2 sequencerConnPoint = sequencer.getConnectionPoint();
-					Vector2 nodeConnPoint = node.getConnectionPoint();
-
-					start.x = sequencerConnPoint.x;
-					start.y = sequencerConnPoint.y;
-
-					end.x = nodeConnPoint.x;
-					end.y = nodeConnPoint.y;
-
-					float halfDistance = Math.abs(start.x - end.x) / 2.0f;
-
-					midLower.x = start.x + halfDistance;
-					midLower.y = start.y;
-
-					midUpper.x = end.x - halfDistance;
-					midUpper.y = end.y;
-
-					//------------------------------------------------------
-
-					float val = 0f;
-
-					while (val < 1f) {
-						path.valueAt(/* out: */ currentVec, val);
-						path.valueAt(/* out: */ nextVec, val + resolution);
-
-						float deltaX = nextVec.x - currentVec.x;
-						float deltaY = nextVec.y - currentVec.y;
-
-						float angleInRadians = MathUtils.atan2(deltaY, deltaX);
-						float angleInDegrees = angleInRadians * 180.0f / MathUtils.PI;
-
-						float width = deltaY / MathUtils.sin(angleInRadians);
-
-						drawLineSegment(batch, currentVec.x, currentVec.y, width + 0.1f, angleInDegrees);
-
-						val += resolution;
-					}
-				}
-			}
-		}
-
-		batch.end();
-	}
-
-	private void drawLineSegment(Batch batch, float x, float y, float width, float rotation) {
-		batch.draw(lineTexture, x, y-2.5f, 0, 2.5f, width, 5, 1, 1, rotation, 0, 0, 1, 5, false, false);
 	}
 
 }

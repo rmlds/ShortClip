@@ -36,6 +36,8 @@ public class SequencerActor extends Actor {
 
     private String sequencerID;
 
+    private SequencerGestureListener sequencerGestureListener;
+
     public SequencerActor(String sequencerID, float x, float y, String textureName, int stepCount, float panelWidth, Stage stage, ShortClip currentScreen) {
         this.sequencerID = sequencerID;
         texture = new Texture(Gdx.files.internal(textureName));
@@ -44,7 +46,8 @@ public class SequencerActor extends Actor {
 
         setBounds(getX(), getY(), texture.getWidth(), texture.getHeight());
 
-        addListener(new SequencerGestureListener(currentScreen, this));
+        this.sequencerGestureListener = new SequencerGestureListener(currentScreen, this);
+        addListener(this.sequencerGestureListener);
 
         this.stage = stage;
 
@@ -168,5 +171,13 @@ public class SequencerActor extends Actor {
         for (int i = 0; i < steps.length; i++) {
             this.steps[i] = steps[i];
         }
+    }
+
+    public boolean isInitiatingConnection() {
+        return this.sequencerGestureListener.isInitiatingConnection();
+    }
+
+    public Vector2 getCursorPosition() {
+        return this.sequencerGestureListener.getCursorPosition();
     }
 }

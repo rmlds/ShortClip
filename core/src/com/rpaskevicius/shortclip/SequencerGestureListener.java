@@ -13,6 +13,8 @@ public class SequencerGestureListener extends ActorGestureListener {
 
     private boolean initiatingConnection;
 
+    private Vector2 cursorPosition = new Vector2(0, 0);
+
     public SequencerGestureListener(ShortClip currentScreen, SequencerActor sequencerActor) {
         this.currentScreen = currentScreen;
         this.sequencerActor = sequencerActor;
@@ -74,6 +76,7 @@ public class SequencerGestureListener extends ActorGestureListener {
 
         } else { // outside of effective area
             //TODO update connection line
+            cursorPosition = sequencerActor.localToStageCoordinates(new Vector2(x, y));
         }
 
         event.handle(); //inform Stage that this event has been handled
@@ -87,6 +90,7 @@ public class SequencerGestureListener extends ActorGestureListener {
             initiatingConnection = true;
 
             //TODO start drawing connection line
+            cursorPosition = sequencerActor.localToStageCoordinates(new Vector2(x, y));
 
             //Vector2 lineStart = sequencerActor.getConnectionPoint();
             //Vector2 lineEnd = sequencerActor.localToStageCoordinates(new Vector2(x, y));
@@ -144,4 +148,11 @@ public class SequencerGestureListener extends ActorGestureListener {
         }
     }
 
+    public boolean isInitiatingConnection() {
+        return this.initiatingConnection;
+    }
+
+    public Vector2 getCursorPosition() {
+        return cursorPosition;
+    }
 }
