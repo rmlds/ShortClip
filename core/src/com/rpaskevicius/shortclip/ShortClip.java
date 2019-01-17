@@ -10,10 +10,7 @@ import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.net.Socket;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
@@ -113,6 +110,15 @@ public class ShortClip extends ScreenAdapter {
 		//UpperUI
 		skin.add("default", new BitmapFont());
 
+		skin.add("ui-play-texture", new Texture(Gdx.files.internal("ui-play.png")));
+		skin.add("ui-stop-texture", new Texture(Gdx.files.internal("ui-stop.png")));
+
+		ButtonStyle playStyle = new ButtonStyle();
+		playStyle.up = skin.newDrawable("ui-play-texture", Color.WHITE);
+		playStyle.down = skin.newDrawable("ui-play-texture", Color.LIGHT_GRAY);
+		playStyle.checked = skin.newDrawable("ui-stop-texture", Color.WHITE);
+		skin.add("ui-play", playStyle);
+
 		Label.LabelStyle labelStyle = new Label.LabelStyle();
 		labelStyle.font = skin.getFont("default");
 		labelStyle.fontColor = Color.WHITE;
@@ -153,8 +159,12 @@ public class ShortClip extends ScreenAdapter {
 	private Table createUpperUI(Skin skin) {
 		Table upperUI = new Table();
 
+		Button play = new Button(skin, "ui-play");
 		Label roomLabel = new Label("Room ID: " + roomID, skin, "ui-room-label");
 
+		play.addListener(new PlayButtonListener(this, play));
+
+		upperUI.add(play);
 		upperUI.add(roomLabel);
 
 		return upperUI;

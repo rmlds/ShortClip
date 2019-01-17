@@ -36,6 +36,8 @@ public class TimeDispatcher {
     }
 
     public void start() {
+        runningTime = 0;
+
         startTime = TimeUtils.millis();
 
         isRunning = true;
@@ -43,6 +45,8 @@ public class TimeDispatcher {
 
     public void stop() {
         isRunning = false;
+
+        sequencePartial = 0; // uncomment to get pause mechanic instead of stop mechanic
     }
 
     public void update() {
