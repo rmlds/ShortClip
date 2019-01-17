@@ -13,11 +13,12 @@ public class PlayButtonListener extends ClickListener {
         this.currentScreen = currentScreen;
         this.button = button;
 
-        button.setChecked(true); //game starts with audio playing
+        button.setChecked(false); //game starts with audio stopped
     }
 
     @Override
     public void clicked(InputEvent event, float x, float y) {
+        /*
         if (button.isChecked()) { //on play
             System.out.println("Starting TimeDispatcher...");
             currentScreen.getTimeDispatcher().start();
@@ -25,5 +26,11 @@ public class PlayButtonListener extends ClickListener {
             System.out.println("Stopping TimeDispatcher...");
             currentScreen.getTimeDispatcher().stop();
         }
+        */
+
+        NetworkMessage message = new NetworkMessage();
+        message.build(10, 0);
+
+        currentScreen.getDataHandler().writeMessage(message);
     }
 }

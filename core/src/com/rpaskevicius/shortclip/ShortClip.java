@@ -32,6 +32,8 @@ public class ShortClip extends ScreenAdapter {
 
 	private ConnectionVisualizer connectionVisualizer;
 
+	private Button playButton;
+
 	public ShortClip(Game launchScreen, AssetManager assetManager, Socket socket, String roomID) {
 		this.assetManager = assetManager;
 		this.socket = socket;
@@ -50,7 +52,7 @@ public class ShortClip extends ScreenAdapter {
 		multiplexer.addProcessor(new GestureDetector(new CameraGestureListener(stage.getCamera())));
 		Gdx.input.setInputProcessor(multiplexer);
 
-		time.start();
+		//time.start(); //time is controlled by the server
 
 		//User interface
 		Skin skin = createSkin();
@@ -159,12 +161,12 @@ public class ShortClip extends ScreenAdapter {
 	private Table createUpperUI(Skin skin) {
 		Table upperUI = new Table();
 
-		Button play = new Button(skin, "ui-play");
+		playButton = new Button(skin, "ui-play");
 		Label roomLabel = new Label("Room ID: " + roomID, skin, "ui-room-label");
 
-		play.addListener(new PlayButtonListener(this, play));
+		playButton.addListener(new PlayButtonListener(this, playButton));
 
-		upperUI.add(play);
+		upperUI.add(playButton);
 		upperUI.add(roomLabel);
 
 		return upperUI;
@@ -212,6 +214,10 @@ public class ShortClip extends ScreenAdapter {
 		}
 
 		return null;
+	}
+
+	public Button getPlayButton() {
+		return this.playButton;
 	}
 
 }

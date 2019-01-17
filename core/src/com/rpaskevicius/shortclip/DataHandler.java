@@ -172,6 +172,28 @@ public class DataHandler extends NetworkHandler {
             } else {
                 //server sent an invalid param
             }
+        } else if (action == 10) { // start/stop
+            if (param == 0) {
+                //start playback
+
+                currentScreen.getTimeDispatcher().start();
+                currentScreen.getPlayButton().setChecked(true); //if true, it is playing
+
+            } else if (param == 1) {
+                //stop playback
+
+                currentScreen.getTimeDispatcher().stop();
+                currentScreen.getPlayButton().setChecked(false); //if false, it is stopped
+
+            } else if (param == 100) {
+                //client starts out in stopped state.
+                //with this param, server lets us know playback is started on other clients
+                //to sync all clients it should be started on this one too.
+
+                currentScreen.getTimeDispatcher().start();
+                currentScreen.getPlayButton().setChecked(true); //if true, it is playing
+            }
+
         } else if (action == 40) {
             //user requested an invalid action
         } else {
