@@ -57,6 +57,26 @@ public class DataHandler extends NetworkHandler {
                     node.getNodeGestureListener().getList().setSelected(soundString);
                 }
 
+            } else if (param == 100) {
+                //server is sending an already existing node to user
+
+                String nodeID = message.readStr(8);
+
+                int x = message.readInt(8);
+                int y = message.readInt(12);
+
+                byte sound = message.readByte(16);
+
+                NodeActor node = new NodeActor(nodeID, x, y, "node-purple-w-connector.png", "kick-01.wav", currentScreen.getAssetManager(), currentScreen.getCenterUI(), currentScreen);
+
+                node.setPosition(x, y);
+
+                String soundString = AssetMap.getNodeSoundString((int)sound);
+                node.setSound(soundString);
+                node.getNodeGestureListener().getList().setSelected(soundString);
+
+                currentScreen.getStage().addActor(node);
+
             } else if (param == 44) {
                 //node not found
             } else if (param == 40) {
@@ -119,6 +139,31 @@ public class DataHandler extends NetworkHandler {
                 SequencerActor sequencer = currentScreen.getSequencerByID(sequencerID);
 
                 if (sequencer != null) { sequencer.clearNode(); }
+
+            } else if (param == 100) {
+                //server is sending an already existing sequencer to user
+
+                String sequencerID = message.readStr(8);
+
+                int x = message.readInt(8);
+                int y = message.readInt(12);
+
+                boolean[] steps = message.readBoolArr(16, 16);
+
+                SequencerActor sequencer = new SequencerActor(sequencerID, x, y, "sequencer-grey-w-panel-white.png", 16, 32, currentScreen.getStage(), currentScreen);
+
+                sequencer.setPosition(x, y);
+
+                sequencer.setSteps(steps);
+
+                if (message.readByte(32) != 0) {
+                    String nodeID = message.readStr(8, 32);
+                    NodeActor node = currentScreen.getNodeByID(nodeID);
+                    sequencer.setNode(node);
+                }
+
+                currentScreen.getTimeDispatcher().addListener(sequencer);
+                currentScreen.getStage().addActor(sequencer);
 
             } else if (param == 44) {
                 //sequencer not found
