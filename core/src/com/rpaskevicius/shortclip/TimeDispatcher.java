@@ -46,7 +46,7 @@ public class TimeDispatcher {
     public void stop() {
         isRunning = false;
 
-        sequencePartial = 0; // uncomment to get pause mechanic instead of stop mechanic
+        sequencePartial = 0; // comment out to get pause mechanic instead of stop mechanic
     }
 
     public void update() {
@@ -84,5 +84,9 @@ public class TimeDispatcher {
         for (SequencerActor listener : listeners) {
             listener.onNextMarkerPosition(sequencePartial, sequenceDuration);
         }
+    }
+
+    public void setSequencePartial(long sequencePartial) {
+        this.sequencePartial = sequencePartial;
     }
 }

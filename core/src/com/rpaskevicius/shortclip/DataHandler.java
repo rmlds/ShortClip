@@ -190,8 +190,13 @@ public class DataHandler extends NetworkHandler {
                 //with this param, server lets us know playback is started on other clients
                 //to sync all clients it should be started on this one too.
 
+                //server sends approx playback position, so client is not out of phase with other clients
+                int sequencePartial = message.readInt(0);
+                System.out.println("Sequence partial: " + sequencePartial);
+                currentScreen.getTimeDispatcher().setSequencePartial((long)sequencePartial);
+
                 currentScreen.getTimeDispatcher().start();
-                currentScreen.getPlayButton().setChecked(true); //if true, it is playing
+                currentScreen.getPlayButton().setChecked(true); //true = playing
             }
 
         } else if (action == 40) {
