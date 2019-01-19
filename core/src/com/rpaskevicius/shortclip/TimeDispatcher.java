@@ -25,8 +25,7 @@ public class TimeDispatcher {
     public TimeDispatcher(float bpm) {
         this.bpm = bpm;
 
-        beatDuration = (long) ((60.0f / bpm) * 1000); //how long does a single beat last in millis.
-        sequenceDuration = beatDuration * 4; //how long does entire sequence last in millis. 4.0f - 4 beats
+        recalcDurations();
 
         listeners = new ArrayList<SequencerActor>();
     }
@@ -72,6 +71,8 @@ public class TimeDispatcher {
 
             int stepIndex = (int) (sequencePartial / stepDuration);
 
+            if (stepIndex > 15) { stepIndex = 15; }
+
             //System.out.println(sequencePartial + " " + stepIndex);
 
             if (stepIndex != listener.getCurrentIndex()) {
@@ -88,5 +89,19 @@ public class TimeDispatcher {
 
     public void setSequencePartial(long sequencePartial) {
         this.sequencePartial = sequencePartial;
+    }
+
+    public float getBpm() {
+        return bpm;
+    }
+
+    public void setBpm(float bpm) {
+        this.bpm = bpm;
+        recalcDurations();
+    }
+
+    public void recalcDurations() {
+        beatDuration = (long) ((60.0f / bpm) * 1000); //how long does a single beat last in millis.
+        sequenceDuration = beatDuration * 4; //how long does entire sequence last in millis. 4 -> 4 beats
     }
 }

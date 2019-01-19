@@ -33,6 +33,7 @@ public class ShortClip extends ScreenAdapter {
 	private ConnectionVisualizer connectionVisualizer;
 
 	private Button playButton;
+    private TextButton bpmButton;
 
 	public ShortClip(Game launchScreen, AssetManager assetManager, Socket socket, String roomID) {
 		this.assetManager = assetManager;
@@ -114,12 +115,19 @@ public class ShortClip extends ScreenAdapter {
 
 		skin.add("ui-play-texture", new Texture(Gdx.files.internal("ui-play.png")));
 		skin.add("ui-stop-texture", new Texture(Gdx.files.internal("ui-stop.png")));
+        skin.add("ui-bpm-texture", new Texture(Gdx.files.internal("ui-bpm.png")));
 
 		ButtonStyle playStyle = new ButtonStyle();
 		playStyle.up = skin.newDrawable("ui-play-texture", Color.WHITE);
 		playStyle.down = skin.newDrawable("ui-play-texture", Color.LIGHT_GRAY);
 		playStyle.checked = skin.newDrawable("ui-stop-texture", Color.WHITE);
 		skin.add("ui-play", playStyle);
+
+        TextButton.TextButtonStyle bpmStyle = new TextButton.TextButtonStyle();
+        bpmStyle.up = skin.newDrawable("ui-bpm-texture", Color.WHITE);
+        bpmStyle.down = skin.newDrawable("ui-bpm-texture", Color.LIGHT_GRAY);
+        bpmStyle.font = skin.getFont("default");
+        skin.add("ui-bpm", bpmStyle);
 
 		Label.LabelStyle labelStyle = new Label.LabelStyle();
 		labelStyle.font = skin.getFont("default");
@@ -162,11 +170,14 @@ public class ShortClip extends ScreenAdapter {
 		Table upperUI = new Table();
 
 		playButton = new Button(skin, "ui-play");
+		bpmButton = new TextButton((int)time.getBpm() + "", skin, "ui-bpm");
 		Label roomLabel = new Label("Room ID: " + roomID, skin, "ui-room-label");
 
 		playButton.addListener(new PlayButtonListener(this, playButton));
+        bpmButton.addListener(new BpmButtonListener(this, bpmButton));
 
 		upperUI.add(playButton);
+		upperUI.add(bpmButton);
 		upperUI.add(roomLabel);
 
 		return upperUI;
@@ -219,5 +230,9 @@ public class ShortClip extends ScreenAdapter {
 	public Button getPlayButton() {
 		return this.playButton;
 	}
+
+    public TextButton getBpmButton() {
+        return bpmButton;
+    }
 
 }
