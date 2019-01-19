@@ -28,5 +28,13 @@ public class BpmButtonListener extends DragListener {
         currentScreen.getTimeDispatcher().setBpm(bpm);
 
         button.setText((int)currentScreen.getTimeDispatcher().getBpm() + "");
+
+        //send bpm to server
+        NetworkMessage message = new NetworkMessage();
+        message.build(11, 0, 4);
+
+        message.writeInt((int)bpm, 0);
+
+        currentScreen.getDataHandler().writeMessage(message);
     }
 }

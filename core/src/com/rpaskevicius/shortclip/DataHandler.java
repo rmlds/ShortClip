@@ -198,7 +198,21 @@ public class DataHandler extends NetworkHandler {
                 currentScreen.getTimeDispatcher().start();
                 currentScreen.getPlayButton().setChecked(true); //true = playing
             }
+        } else if (action == 11) { // bpm
+            if (param == 0) {
+                //change bpm
 
+                int bpm = message.readInt(0);
+
+                currentScreen.getTimeDispatcher().setBpm((float)bpm);
+                currentScreen.getBpmButton().setText((int)currentScreen.getTimeDispatcher().getBpm() + "");
+            } else if (param == 100) {
+                //client starts out with bpm = 120.
+                //with this param server lets us know the bpm has been changed
+
+                //however, the code is identical to param == 0,
+                //so server sends param = 0 when a new player joins
+            }
         } else if (action == 40) {
             //user requested an invalid action
         } else {
