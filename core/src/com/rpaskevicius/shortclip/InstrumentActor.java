@@ -27,7 +27,7 @@ public class InstrumentActor extends Actor {
 
         setBounds(getX(), getY(), background.getWidth(), background.getHeight());
 
-        setInstrument("piano");
+        setInstrument("bass");
     }
 
     @Override

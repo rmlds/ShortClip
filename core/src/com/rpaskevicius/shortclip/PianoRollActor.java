@@ -24,10 +24,10 @@ public class PianoRollActor extends Actor implements TimeListener {
     private InstrumentActor instrument;
     private int currentIndex = -1;
 
-    private int[] scaleMap = ScaleMap.genScaleMap("c#");
+    private int[] scaleMap = ScaleMap.genScaleMap("e");
 
     private float markerOffset;
-    private Texture markerTexture = new Texture(Gdx.files.internal("marker-white.png"));
+    private Texture markerTexture = new Texture(Gdx.files.internal("piano-roll-marker.png"));
 
     public PianoRollActor(String sequencerID, float x, float y, ShortClip currentScreen) {
         this.sequencerID = sequencerID;

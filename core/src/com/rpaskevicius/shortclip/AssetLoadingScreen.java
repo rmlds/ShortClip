@@ -40,6 +40,7 @@ public class AssetLoadingScreen extends ScreenAdapter {
         }
 
         loadInstrument("piano");
+        loadInstrument("bass");
     }
 
     @Override
