@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
 public class ShortClip extends ScreenAdapter {
@@ -73,10 +74,20 @@ public class ShortClip extends ScreenAdapter {
 		table.add(lowerUI).expand().bottom().right();
 
 		stageUI.addActor(table);
-		stageUI.setDebugAll(true);
+		//stageUI.setDebugAll(true);
 
 		//Sequencer and node connection visualizer
 		this.connectionVisualizer = new ConnectionVisualizer(this);
+
+		//--------------------------------------
+
+		PianoRollActor p = new PianoRollActor("ABCDEFGH", 0, 0, this);
+		time.addListener2(p);
+		stage.addActor(p);
+
+		InstrumentActor in = new InstrumentActor("XYZABCDE", 550, 100, this);
+		stage.addActor(in);
+		p.setInstrument(in);
 	}
 
 	@Override

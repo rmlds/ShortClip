@@ -8,6 +8,7 @@ import java.util.List;
 public class TimeDispatcher {
 
     private List<SequencerActor> listeners;
+    private List<PianoRollActor> listeners2;
 
     private float bpm;
 
@@ -28,10 +29,15 @@ public class TimeDispatcher {
         recalcDurations();
 
         listeners = new ArrayList<SequencerActor>();
+        listeners2 = new ArrayList<PianoRollActor>();
     }
 
     public void addListener(SequencerActor listener) {
         listeners.add(listener);
+    }
+
+    public void addListener2(PianoRollActor listener2) {
+        listeners2.add(listener2);
     }
 
     public void start() {
@@ -77,6 +83,18 @@ public class TimeDispatcher {
 
             if (stepIndex != listener.getCurrentIndex()) {
                 listener.onNextStep(stepIndex); //TODO still sometimes gives ArrayIndexOutOfBoundsException
+            }
+        }
+
+        for (PianoRollActor listener2 : listeners2) {
+            long stepDuration = sequenceDuration / listener2.getStepCount();
+
+            int stepIndex = (int) (sequencePartial / stepDuration);
+
+            if (stepIndex > 15) { stepIndex = 15; }
+
+            if (stepIndex != listener2.getCurrentIndex()) {
+                listener2.onNextStep(stepIndex); //TODO still sometimes gives ArrayIndexOutOfBoundsException
             }
         }
     }

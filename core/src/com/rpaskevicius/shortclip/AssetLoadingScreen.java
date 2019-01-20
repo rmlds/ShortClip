@@ -38,6 +38,8 @@ public class AssetLoadingScreen extends ScreenAdapter {
         for (String sound : sounds) {
             assetManager.load(sound, Sound.class);
         }
+
+        loadInstrument("piano");
     }
 
     @Override
@@ -58,5 +60,13 @@ public class AssetLoadingScreen extends ScreenAdapter {
     @Override
     public void dispose() {
         //TODO dispose resources
+    }
+
+    private void loadInstrument(String instrument) {
+        for (int i = 0; i < 24; i++) {
+            String fileName = instrument + "/" + instrument + "-" + i + ".wav";
+
+            assetManager.load(fileName, Sound.class);
+        }
     }
 }
