@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
-public class SequencerActor extends Actor {
+public class SequencerActor extends Actor implements TimeListener {
     private Texture texture;
 
     private int stepCount;
@@ -25,7 +25,7 @@ public class SequencerActor extends Actor {
     private LineActor line;
     private Stage stage;
 
-    private float markerPosition;
+    private float markerOffset;
     private Texture markerTexture = new Texture(Gdx.files.internal("marker-white.png"));
 
     private Texture stepHolderTexture = new Texture(Gdx.files.internal("step-holder.png"));
@@ -89,7 +89,7 @@ public class SequencerActor extends Actor {
         }
 
         //draw the playback marker
-        batch.draw(markerTexture, markerPosition, getY());
+        batch.draw(markerTexture, getX() + markerOffset, getY());
     }
 
     public int getStepCount() {
@@ -153,10 +153,8 @@ public class SequencerActor extends Actor {
         return localToStageCoordinates(new Vector2(pointX, pointY));
     }
 
-    public void onNextMarkerPosition(long sequencePartial, long sequenceDuration) {
-        float ratio = (float) sequencePartial / (float) sequenceDuration;
-
-        markerPosition = getX() + (getEffectiveArea() * ratio);
+    public void onNextMarkerPosition(float ratio) {
+        markerOffset = getEffectiveArea() * ratio;
     }
 
     public String getSequencerID() {

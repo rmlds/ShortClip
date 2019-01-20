@@ -82,7 +82,7 @@ public class ShortClip extends ScreenAdapter {
 		//--------------------------------------
 
 		PianoRollActor p = new PianoRollActor("ABCDEFGH", 0, 0, this);
-		time.addListener2(p);
+		time.addListener(p);
 		stage.addActor(p);
 
 		InstrumentActor in = new InstrumentActor("XYZABCDE", 550, 100, this);

@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public class PianoRollActor extends Actor {
+public class PianoRollActor extends Actor implements TimeListener {
     private String sequencerID;
 
     private Texture background;
@@ -25,6 +25,9 @@ public class PianoRollActor extends Actor {
     private int currentIndex = -1;
 
     private int[] scaleMap = ScaleMap.genScaleMap("c#");
+
+    private float markerOffset;
+    private Texture markerTexture = new Texture(Gdx.files.internal("marker-white.png"));
 
     public PianoRollActor(String sequencerID, float x, float y, ShortClip currentScreen) {
         this.sequencerID = sequencerID;
@@ -70,6 +73,9 @@ public class PianoRollActor extends Actor {
         }
 
         batch.draw(overlay, getX(), getY());
+
+        //draw the playback marker
+        batch.draw(markerTexture, getX() + markerOffset, getY());
     }
 
     public float getEffectiveArea() {
@@ -123,5 +129,9 @@ public class PianoRollActor extends Actor {
 
     public InstrumentActor getInstrument() {
         return this.instrument;
+    }
+
+    public void onNextMarkerPosition(float ratio) {
+        markerOffset = getEffectiveArea() * ratio;
     }
 }

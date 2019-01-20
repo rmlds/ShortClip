@@ -7,8 +7,7 @@ import java.util.List;
 
 public class TimeDispatcher {
 
-    private List<SequencerActor> listeners;
-    private List<PianoRollActor> listeners2;
+    private List<TimeListener> listeners;
 
     private float bpm;
 
@@ -28,16 +27,11 @@ public class TimeDispatcher {
 
         recalcDurations();
 
-        listeners = new ArrayList<SequencerActor>();
-        listeners2 = new ArrayList<PianoRollActor>();
+        listeners = new ArrayList<TimeListener>();
     }
 
-    public void addListener(SequencerActor listener) {
+    public void addListener(TimeListener listener) {
         listeners.add(listener);
-    }
-
-    public void addListener2(PianoRollActor listener2) {
-        listeners2.add(listener2);
     }
 
     public void start() {
@@ -72,7 +66,7 @@ public class TimeDispatcher {
     }
 
     public void dispatchStepEvents() {
-        for (SequencerActor listener : listeners) {
+        for (TimeListener listener : listeners) {
             long stepDuration = sequenceDuration / listener.getStepCount();
 
             int stepIndex = (int) (sequencePartial / stepDuration);
@@ -85,23 +79,13 @@ public class TimeDispatcher {
                 listener.onNextStep(stepIndex); //TODO still sometimes gives ArrayIndexOutOfBoundsException
             }
         }
-
-        for (PianoRollActor listener2 : listeners2) {
-            long stepDuration = sequenceDuration / listener2.getStepCount();
-
-            int stepIndex = (int) (sequencePartial / stepDuration);
-
-            if (stepIndex > 15) { stepIndex = 15; }
-
-            if (stepIndex != listener2.getCurrentIndex()) {
-                listener2.onNextStep(stepIndex); //TODO still sometimes gives ArrayIndexOutOfBoundsException
-            }
-        }
     }
 
     public void dispatchMarkerPositions() {
-        for (SequencerActor listener : listeners) {
-            listener.onNextMarkerPosition(sequencePartial, sequenceDuration);
+        for (TimeListener listener : listeners) {
+            float ratio = (float) sequencePartial / (float) sequenceDuration;
+
+            listener.onNextMarkerPosition(ratio);
         }
     }
 
