@@ -3,10 +3,8 @@ package com.rpaskevicius.shortclip;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public class PianoRollActor extends NetworkedActor implements TimeListener {
+public class PianoRollActor extends NetworkedDuoplexedActor implements TimeListener {
     private Texture background;
     private Texture overlay;
 
@@ -17,7 +15,7 @@ public class PianoRollActor extends NetworkedActor implements TimeListener {
 
     private float effectiveArea;
 
-    private PianoRollGestureListener pianoRollGestureListener;
+    private PianoRollGestureListener listener;
 
     private InstrumentActor instrument;
     private int currentIndex = -1;
@@ -28,23 +26,25 @@ public class PianoRollActor extends NetworkedActor implements TimeListener {
     private Texture markerTexture = new Texture(Gdx.files.internal("piano-roll-marker.png"));
 
     public PianoRollActor(String ID, float x, float y, ShortClip currentScreen) {
-        super(ID);
+        super(ID, 0);
 
         background = new Texture(Gdx.files.internal("piano-roll-background.png"));
         overlay = new Texture(Gdx.files.internal("piano-roll-overlay.png"));
+
+        setBound(background.getWidth() - 32);
 
         setPosition(x, y);
 
         setBounds(getX(), getY(), background.getWidth(), background.getHeight());
 
-        this.pianoRollGestureListener = new PianoRollGestureListener(currentScreen, this);
-        addListener(this.pianoRollGestureListener);
+        this.listener = new PianoRollGestureListener(this, currentScreen);
+        addListener(this.listener);
 
         for (int i = 0; i < 8; i++) {
             steps[i] = new boolean[stepCount];
         }
 
-        effectiveArea = background.getWidth() - 32; //panel width = 32
+        effectiveArea = background.getWidth() - 32; // TODO similar to bound, resolve
     }
 
     @Override

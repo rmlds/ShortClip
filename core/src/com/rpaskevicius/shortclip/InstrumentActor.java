@@ -9,17 +9,18 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
-public class InstrumentActor extends Actor {
+public class InstrumentActor extends NetworkedActor {
     private Texture background;
     private Sound tones[] = new Sound[24];
 
     private AssetManager assetManager;
 
-    private String nodeID;
+    private InstrumentGestureListener listener;
 
-    public InstrumentActor(String nodeID, float x, float y, ShortClip currentScreen) {
-        this.nodeID = nodeID;
-        this.assetManager = currentScreen.getAssetManager();
+    public InstrumentActor(String ID, float x, float y, ShortClip screen) {
+        super(ID);
+
+        this.assetManager = screen.getAssetManager();
 
         background = new Texture(Gdx.files.internal("node-blue.png"));
 
@@ -28,6 +29,9 @@ public class InstrumentActor extends Actor {
         setBounds(getX(), getY(), background.getWidth(), background.getHeight());
 
         setInstrument("bass");
+
+        this.listener = new InstrumentGestureListener(this, screen);
+        addListener(this.listener);
     }
 
     @Override

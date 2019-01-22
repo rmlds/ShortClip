@@ -1,10 +1,10 @@
 package com.rpaskevicius.shortclip;
 
-public class NetworkedMultiplexedActor extends NetworkedActor {
+public class NetworkedDuoplexedActor extends NetworkedActor {
 
     private float bound;
 
-    public NetworkedMultiplexedActor(String ID, float bound) {
+    public NetworkedDuoplexedActor(String ID, float bound) {
         super(ID);
         this.bound = bound;
     }
