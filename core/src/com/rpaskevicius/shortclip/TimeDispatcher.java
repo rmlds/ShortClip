@@ -103,7 +103,7 @@ public class TimeDispatcher {
     }
 
     public void recalcDurations() {
-        beatDuration = (long) ((60.0f / bpm) * 1000); //how long does a single beat last in millis.
+        beatDuration = (long) (60000.0f / bpm); //how long does a single beat last in millis.
         sequenceDuration = beatDuration * 4; //how long does entire sequence last in millis. 4 -> 4 beats
     }
 }

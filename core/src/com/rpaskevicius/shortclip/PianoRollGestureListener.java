@@ -5,13 +5,15 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 
-public class PianoRollGestureListener extends ActorGestureListener {
+public class PianoRollGestureListener extends NetworkedPannable {
 
     private ShortClip currentScreen;
 
     private PianoRollActor pianoRollActor;
 
     public PianoRollGestureListener(ShortClip currentScreen, PianoRollActor pianoRollActor) {
+        super(pianoRollActor, currentScreen);
+
         this.currentScreen = currentScreen;
         this.pianoRollActor = pianoRollActor;
     }

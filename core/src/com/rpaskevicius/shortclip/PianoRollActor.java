@@ -6,9 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public class PianoRollActor extends Actor implements TimeListener {
-    private String sequencerID;
-
+public class PianoRollActor extends NetworkedActor implements TimeListener {
     private Texture background;
     private Texture overlay;
 
@@ -29,8 +27,8 @@ public class PianoRollActor extends Actor implements TimeListener {
     private float markerOffset;
     private Texture markerTexture = new Texture(Gdx.files.internal("piano-roll-marker.png"));
 
-    public PianoRollActor(String sequencerID, float x, float y, ShortClip currentScreen) {
-        this.sequencerID = sequencerID;
+    public PianoRollActor(String ID, float x, float y, ShortClip currentScreen) {
+        super(ID);
 
         background = new Texture(Gdx.files.internal("piano-roll-background.png"));
         overlay = new Texture(Gdx.files.internal("piano-roll-overlay.png"));
