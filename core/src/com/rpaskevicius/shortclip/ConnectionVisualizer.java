@@ -44,30 +44,18 @@ public class ConnectionVisualizer {
                     Vector2 originConnPoint = origin.getConnectionPoint();
                     Vector2 targetConnPoint = target.getConnectionPoint();
 
-                    start.x = originConnPoint.x;
-                    start.y = originConnPoint.y;
-
-                    end.x = targetConnPoint.x;
-                    end.y = targetConnPoint.y;
-
-                    updateMidPoints();
+                    setPoints(originConnPoint, targetConnPoint);
 
                     //Coordinates are set up. Now we can draw the path
                     drawLine(batch);
                 }
 
-                //if user is initiating connection, draw line from sequencer to cursor position
+                //if user is initiating connection, draw line from origin to cursor position
                 if (origin.isInitiatingConnection()) {
                     Vector2 originConnPoint = origin.getConnectionPoint();
                     Vector2 cursorPosition = origin.getCursorPosition();
 
-                    start.x = originConnPoint.x;
-                    start.y = originConnPoint.y;
-
-                    end.x = cursorPosition.x;
-                    end.y = cursorPosition.y;
-
-                    updateMidPoints();
+                    setPoints(originConnPoint, cursorPosition);
 
                     drawLine(batch);
                 }
@@ -76,6 +64,26 @@ public class ConnectionVisualizer {
         }
 
         batch.end();
+    }
+
+    private void setPoints(Vector2 start, Vector2 end) {
+        this.start.x = start.x;
+        this.start.y = start.y;
+
+        this.end.x = end.x;
+        this.end.y = end.y;
+
+        updateMidPoints();
+    }
+
+    private void updateMidPoints() {
+        float halfDistance = Math.abs(start.x - end.x) / 2.0f;
+
+        midLower.x = start.x + halfDistance;
+        midLower.y = start.y;
+
+        midUpper.x = end.x - halfDistance;
+        midUpper.y = end.y;
     }
 
     private void drawLine(Batch batch) {
@@ -101,16 +109,6 @@ public class ConnectionVisualizer {
 
     private void drawLineSegment(Batch batch, float x, float y, float width, float rotation) {
         batch.draw(lineTexture, x, y-2.5f, 0, 2.5f, width, 5, 1, 1, rotation, 0, 0, 1, 5, false, false);
-    }
-
-    private void updateMidPoints() {
-        float halfDistance = Math.abs(start.x - end.x) / 2.0f;
-
-        midLower.x = start.x + halfDistance;
-        midLower.y = start.y;
-
-        midUpper.x = end.x - halfDistance;
-        midUpper.y = end.y;
     }
 
 }

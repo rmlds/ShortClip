@@ -6,21 +6,18 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
-public class NodeActor extends Actor implements VisualTarget {
+public class NodeActor extends NetworkedActor implements VisualTarget {
     private Texture texture;
     private Sound sound;
 
     private AssetManager assetManager;
 
-    private String nodeID;
-
     private NodeGestureListener nodeGestureListener;
 
-    public NodeActor(String nodeID, float x, float y, String textureName, String soundName, AssetManager assetManager, Table centerUI, ShortClip currentScreen) {
-        this.nodeID = nodeID;
+    public NodeActor(String ID, float x, float y, String textureName, String soundName, AssetManager assetManager, Table centerUI, ShortClip currentScreen) {
+        super(ID);
         this.assetManager = assetManager;
 
         texture = new Texture(Gdx.files.internal(textureName));
@@ -51,10 +48,6 @@ public class NodeActor extends Actor implements VisualTarget {
 
     public void setSound(String sound) {
         this.sound = assetManager.get(sound, Sound.class);
-    }
-
-    public String getNodeID() {
-        return nodeID;
     }
 
     public NodeGestureListener getNodeGestureListener() {

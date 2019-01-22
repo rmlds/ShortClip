@@ -26,6 +26,8 @@ public class PianoRollGestureListener extends NetworkedLinker {
             } else {
                 actor.setStepState(toneIndex, stepIndex, true);
             }
+
+            //TODO send steps to the server
         }
     }
 

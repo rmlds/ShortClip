@@ -5,10 +5,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 
-public class SequencerActor extends Actor implements TimeListener, VisualOrigin {
-    private Texture texture;
+public class SequencerActor extends NetworkedDuoplexedActor implements TimeListener, VisualOrigin {
+    private Texture background;
 
     private int stepCount;
 
@@ -20,10 +19,6 @@ public class SequencerActor extends Actor implements TimeListener, VisualOrigin 
     private int currentIndex;
 
     private float effectiveArea;
-    private float panelArea;
-
-    private LineActor line;
-    private Stage stage;
 
     private float markerOffset;
     private Texture markerTexture = new Texture(Gdx.files.internal("marker-white.png"));
@@ -34,30 +29,28 @@ public class SequencerActor extends Actor implements TimeListener, VisualOrigin 
     private float stepHolderOffsetY;
     private float stepHolderSmallOffsetY;
 
-    private String sequencerID;
-
     private SequencerGestureListener listener;
 
-    public SequencerActor(String sequencerID, float x, float y, String textureName, int stepCount, float panelWidth, Stage stage, ShortClip currentScreen) {
-        this.sequencerID = sequencerID;
-        texture = new Texture(Gdx.files.internal(textureName));
+    public SequencerActor(String ID, float x, float y, String textureName, int stepCount, float panelWidth, ShortClip currentScreen) {
+        super(ID, 0);
+
+        background = new Texture(Gdx.files.internal(textureName));
+
+        setBound(background.getWidth() - 32);
 
         setPosition(x, y);
 
-        setBounds(getX(), getY(), texture.getWidth(), texture.getHeight());
+        setBounds(getX(), getY(), background.getWidth(), background.getHeight());
 
-        this.listener = new SequencerGestureListener(currentScreen, this);
+        this.listener = new SequencerGestureListener(this, currentScreen);
         addListener(this.listener);
-
-        this.stage = stage;
 
         this.stepCount = stepCount;
         steps = new boolean[stepCount];
 
         currentIndex = -1; //otherwise the 0th step at the very start won't be triggered. TODO Should also do this on time.stop();
 
-        panelArea = panelWidth;
-        effectiveArea = texture.getWidth() - panelWidth;
+        effectiveArea = background.getWidth() - panelWidth;
 
         stepHolderOffsetY = (getHeight() - stepHolderTexture.getHeight()) / 2.0f;
         stepHolderSmallOffsetY = (getHeight() - stepHolderSmallTexture.getHeight()) / 2.0f;
@@ -70,7 +63,7 @@ public class SequencerActor extends Actor implements TimeListener, VisualOrigin 
 
     @Override
     public void draw (Batch batch, float parentAlpha) {
-        batch.draw(texture, getX(), getY());
+        batch.draw(background, getX(), getY());
 
         float stepWidth = getEffectiveArea() / getStepCount();
 
@@ -107,8 +100,6 @@ public class SequencerActor extends Actor implements TimeListener, VisualOrigin 
     public void onNextStep(int stepIndex) {
         setCurrentIndex(stepIndex);
 
-        //System.out.println("onNextStep");
-
         if (node != null && steps[stepIndex]) {
             node.play();
         }
@@ -134,16 +125,8 @@ public class SequencerActor extends Actor implements TimeListener, VisualOrigin 
         return effectiveArea;
     }
 
-    public float getPanelArea() {
-        return panelArea;
-    }
-
     public void onNextMarkerPosition(float ratio) {
         markerOffset = getEffectiveArea() * ratio;
-    }
-
-    public String getSequencerID() {
-        return this.sequencerID;
     }
 
     public boolean[] getSteps() {
@@ -175,4 +158,5 @@ public class SequencerActor extends Actor implements TimeListener, VisualOrigin 
 
     @Override
     public Vector2 getCursorPosition() { return listener.getCursorPosition(); }
+
 }

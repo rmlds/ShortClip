@@ -93,7 +93,7 @@ public class DataHandler extends NetworkHandler {
                 int x = message.readInt(8);
                 int y = message.readInt(12);
 
-                SequencerActor sequencer = new SequencerActor(sequencerID, x, y, "sequencer-grey-w-panel-white.png", 16, 32, currentScreen.getStage(), currentScreen);
+                SequencerActor sequencer = new SequencerActor(sequencerID, x, y, "sequencer-grey-w-panel-white.png", 16, 32, currentScreen);
 
                 currentScreen.getTimeDispatcher().addListener(sequencer);
                 currentScreen.getStage().addActor(sequencer);
@@ -150,7 +150,7 @@ public class DataHandler extends NetworkHandler {
 
                 boolean[] steps = message.readBoolArr(16, 16);
 
-                SequencerActor sequencer = new SequencerActor(sequencerID, x, y, "sequencer-grey-w-panel-white.png", 16, 32, currentScreen.getStage(), currentScreen);
+                SequencerActor sequencer = new SequencerActor(sequencerID, x, y, "sequencer-grey-w-panel-white.png", 16, 32, currentScreen);
 
                 sequencer.setPosition(x, y);
 

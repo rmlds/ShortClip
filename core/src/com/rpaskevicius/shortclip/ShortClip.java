@@ -214,10 +214,10 @@ public class ShortClip extends ScreenAdapter {
 		return time;
 	}
 
-	public NodeActor getNodeByID(String nodeID) {
+	public NodeActor getNodeByID(String ID) {
 		for (Actor actor : stage.getActors()) {
 			if (actor instanceof NodeActor) {
-				if (((NodeActor) actor).getNodeID().equals(nodeID)) {
+				if (((NodeActor) actor).getID().equals(ID)) {
 					return ((NodeActor) actor);
 				}
 			}
@@ -226,10 +226,10 @@ public class ShortClip extends ScreenAdapter {
 		return null;
 	}
 
-	public SequencerActor getSequencerByID(String sequencerID) {
+	public SequencerActor getSequencerByID(String ID) {
 		for (Actor actor : stage.getActors()) {
 			if (actor instanceof SequencerActor) {
-				if (((SequencerActor) actor).getSequencerID().equals(sequencerID)) {
+				if (((SequencerActor) actor).getID().equals(ID)) {
 					return ((SequencerActor) actor);
 				}
 			}
