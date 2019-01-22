@@ -35,20 +35,20 @@ public class ConnectionVisualizer {
         batch.begin();
 
         for (Actor actor : currentScreen.getStage().getActors()) {
-            if (actor instanceof SequencerActor) {
-                SequencerActor sequencer = (SequencerActor) actor;
+            if (actor instanceof VisualOrigin) {
+                VisualOrigin origin = (VisualOrigin) actor;
 
-                if (sequencer.hasNode()) {
-                    NodeActor node = sequencer.getNode();
+                if (origin.hasReference()) {
+                    VisualTarget target = origin.getReference();
 
-                    Vector2 sequencerConnPoint = sequencer.getConnectionPoint();
-                    Vector2 nodeConnPoint = node.getConnectionPoint();
+                    Vector2 originConnPoint = origin.getConnectionPoint();
+                    Vector2 targetConnPoint = target.getConnectionPoint();
 
-                    start.x = sequencerConnPoint.x;
-                    start.y = sequencerConnPoint.y;
+                    start.x = originConnPoint.x;
+                    start.y = originConnPoint.y;
 
-                    end.x = nodeConnPoint.x;
-                    end.y = nodeConnPoint.y;
+                    end.x = targetConnPoint.x;
+                    end.y = targetConnPoint.y;
 
                     updateMidPoints();
 
@@ -57,15 +57,15 @@ public class ConnectionVisualizer {
                 }
 
                 //if user is initiating connection, draw line from sequencer to cursor position
-                if (sequencer.isInitiatingConnection()) {
-                    Vector2 sequencerConnPoint = sequencer.getConnectionPoint();
-                    Vector2 initPosition = sequencer.getCursorPosition();
+                if (origin.isInitiatingConnection()) {
+                    Vector2 originConnPoint = origin.getConnectionPoint();
+                    Vector2 cursorPosition = origin.getCursorPosition();
 
-                    start.x = sequencerConnPoint.x;
-                    start.y = sequencerConnPoint.y;
+                    start.x = originConnPoint.x;
+                    start.y = originConnPoint.y;
 
-                    end.x = initPosition.x;
-                    end.y = initPosition.y;
+                    end.x = cursorPosition.x;
+                    end.y = cursorPosition.y;
 
                     updateMidPoints();
 

@@ -3,8 +3,9 @@ package com.rpaskevicius.shortclip;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Vector2;
 
-public class PianoRollActor extends NetworkedDuoplexedActor implements TimeListener {
+public class PianoRollActor extends NetworkedDuoplexedActor implements TimeListener, VisualOrigin {
     private Texture background;
     private Texture overlay;
 
@@ -121,15 +122,28 @@ public class PianoRollActor extends NetworkedDuoplexedActor implements TimeListe
         this.instrument = null;
     }
 
-    public boolean hasInstrument() {
-        return (this.instrument != null);
-    }
-
-    public InstrumentActor getInstrument() {
-        return this.instrument;
-    }
-
     public void onNextMarkerPosition(float ratio) {
         markerOffset = getEffectiveArea() * ratio;
     }
+
+    @Override
+    public boolean hasReference() { return (instrument != null); }
+
+    @Override
+    public VisualTarget getReference() { return instrument; }
+
+    @Override
+    public Vector2 getConnectionPoint() {
+        float pointX = getWidth() - 16.0f;
+        float pointY = getHeight() / 2.0f;
+
+        return localToStageCoordinates(new Vector2(pointX, pointY));
+    }
+
+    @Override
+    public boolean isInitiatingConnection() { return listener.isInitiatingConnection(); }
+
+    @Override
+    public Vector2 getCursorPosition() { return listener.getCursorPosition(); }
+
 }

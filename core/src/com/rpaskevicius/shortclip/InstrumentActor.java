@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
-public class InstrumentActor extends NetworkedActor {
+public class InstrumentActor extends NetworkedActor implements VisualTarget {
     private Texture background;
     private Sound tones[] = new Sound[24];
 
@@ -55,5 +55,13 @@ public class InstrumentActor extends NetworkedActor {
 
             this.tones[i] = assetManager.get(fileName, Sound.class);
         }
+    }
+
+    @Override
+    public Vector2 getConnectionPoint() {
+        float pointX = 16.0f;
+        float pointY = getHeight() / 2.0f;
+
+        return localToStageCoordinates(new Vector2(pointX, pointY));
     }
 }

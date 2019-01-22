@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
-public class SequencerActor extends Actor implements TimeListener {
+public class SequencerActor extends Actor implements TimeListener, VisualOrigin {
     private Texture texture;
 
     private int stepCount;
@@ -36,7 +36,7 @@ public class SequencerActor extends Actor implements TimeListener {
 
     private String sequencerID;
 
-    private SequencerGestureListener sequencerGestureListener;
+    private SequencerGestureListener listener;
 
     public SequencerActor(String sequencerID, float x, float y, String textureName, int stepCount, float panelWidth, Stage stage, ShortClip currentScreen) {
         this.sequencerID = sequencerID;
@@ -46,8 +46,8 @@ public class SequencerActor extends Actor implements TimeListener {
 
         setBounds(getX(), getY(), texture.getWidth(), texture.getHeight());
 
-        this.sequencerGestureListener = new SequencerGestureListener(currentScreen, this);
-        addListener(this.sequencerGestureListener);
+        this.listener = new SequencerGestureListener(currentScreen, this);
+        addListener(this.listener);
 
         this.stage = stage;
 
@@ -130,27 +130,12 @@ public class SequencerActor extends Actor implements TimeListener {
         this.node = null;
     }
 
-    public boolean hasNode() {
-        return (this.node != null);
-    }
-
-    public NodeActor getNode() {
-        return this.node;
-    }
-
     public float getEffectiveArea() {
         return effectiveArea;
     }
 
     public float getPanelArea() {
         return panelArea;
-    }
-
-    public Vector2 getConnectionPoint() {
-        float pointX = getWidth() - 16.0f;
-        float pointY = getHeight() / 2.0f;
-
-        return localToStageCoordinates(new Vector2(pointX, pointY));
     }
 
     public void onNextMarkerPosition(float ratio) {
@@ -171,11 +156,23 @@ public class SequencerActor extends Actor implements TimeListener {
         }
     }
 
-    public boolean isInitiatingConnection() {
-        return this.sequencerGestureListener.isInitiatingConnection();
+    @Override
+    public boolean hasReference() { return (node != null); }
+
+    @Override
+    public VisualTarget getReference() { return node; }
+
+    @Override
+    public Vector2 getConnectionPoint() {
+        float pointX = getWidth() - 16.0f;
+        float pointY = getHeight() / 2.0f;
+
+        return localToStageCoordinates(new Vector2(pointX, pointY));
     }
 
-    public Vector2 getCursorPosition() {
-        return this.sequencerGestureListener.getCursorPosition();
-    }
+    @Override
+    public boolean isInitiatingConnection() { return listener.isInitiatingConnection(); }
+
+    @Override
+    public Vector2 getCursorPosition() { return listener.getCursorPosition(); }
 }

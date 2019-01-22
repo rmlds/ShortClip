@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
-public class NodeActor extends Actor {
+public class NodeActor extends Actor implements VisualTarget {
     private Texture texture;
     private Sound sound;
 
@@ -49,13 +49,6 @@ public class NodeActor extends Actor {
         batch.draw(texture, getX(), getY());
     }
 
-    public Vector2 getConnectionPoint() {
-        float pointX = 16.0f;
-        float pointY = getHeight() / 2.0f;
-
-        return localToStageCoordinates(new Vector2(pointX, pointY));
-    }
-
     public void setSound(String sound) {
         this.sound = assetManager.get(sound, Sound.class);
     }
@@ -66,5 +59,13 @@ public class NodeActor extends Actor {
 
     public NodeGestureListener getNodeGestureListener() {
         return nodeGestureListener;
+    }
+
+    @Override
+    public Vector2 getConnectionPoint() {
+        float pointX = 16.0f;
+        float pointY = getHeight() / 2.0f;
+
+        return localToStageCoordinates(new Vector2(pointX, pointY));
     }
 }
