@@ -168,8 +168,8 @@ public class ShortClip extends ScreenAdapter {
 		Button addNode = new Button(skin, "ui-add-node");
 		Button addSequencer = new Button(skin, "ui-add-sequencer");
 
-		addNode.addListener(new NodeButtonListener(this, stage, assetManager, centerUI));
-		addSequencer.addListener(new SequencerButtonListener(this, stage, time));
+		addNode.addListener(new NodeCreator(this));
+		addSequencer.addListener(new SequencerCreator(this));
 
 		lowerUI.add(addSequencer);
 		lowerUI.add(addNode);
