@@ -1,7 +1,5 @@
 package com.rpaskevicius.shortclip;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
-
 public class NetworkMap {
 
     public static int getCode(NetworkedActor actor) {

@@ -16,7 +16,7 @@ public class NodeActor extends NetworkedActor implements VisualTarget {
 
     private NodeGestureListener nodeGestureListener;
 
-    public NodeActor(String ID, float x, float y, String textureName, String soundName, AssetManager assetManager, Table centerUI, ShortClip currentScreen) {
+    public NodeActor(String ID, float x, float y, String textureName, String soundName, AssetManager assetManager, ShortClip currentScreen) {
         super(ID);
         this.assetManager = assetManager;
 
@@ -28,7 +28,7 @@ public class NodeActor extends NetworkedActor implements VisualTarget {
 
         setBounds(getX(), getY(), texture.getWidth(), texture.getHeight());
 
-        this.nodeGestureListener = new NodeGestureListener(this, assetManager, centerUI, currentScreen);
+        this.nodeGestureListener = new NodeGestureListener(this, currentScreen);
         addListener(this.nodeGestureListener);
     }
 

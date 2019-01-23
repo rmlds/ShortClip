@@ -25,7 +25,7 @@ public class DataHandler extends NetworkHandler {
                 int x = message.readInt(8);
                 int y = message.readInt(12);
 
-                NodeActor node = new NodeActor(nodeID, x, y, "node-purple-w-connector.png", "kick-01.wav", currentScreen.getAssetManager(), currentScreen.getCenterUI(), currentScreen);
+                NodeActor node = new NodeActor(nodeID, x, y, "node-purple-w-connector.png", "kick-01.wav", currentScreen.getAssetManager(), currentScreen);
                 currentScreen.getStage().addActor(node);
 
             } else if (param == 1) {
@@ -67,7 +67,7 @@ public class DataHandler extends NetworkHandler {
 
                 byte sound = message.readByte(16);
 
-                NodeActor node = new NodeActor(nodeID, x, y, "node-purple-w-connector.png", "kick-01.wav", currentScreen.getAssetManager(), currentScreen.getCenterUI(), currentScreen);
+                NodeActor node = new NodeActor(nodeID, x, y, "node-purple-w-connector.png", "kick-01.wav", currentScreen.getAssetManager(), currentScreen);
 
                 node.setPosition(x, y);
 
