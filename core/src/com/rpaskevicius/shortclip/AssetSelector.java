@@ -27,10 +27,9 @@ public class AssetSelector {
         list = new List<String>(skin, "list-style");
         list.setItems(AssetMap.nodeSounds);
         list.setSelected("kick-01.wav");
+        list.addListener(new AssetSelectorListener(this, screen));
 
         scrollPane = new ScrollPane(list, skin, "scroll-pane-style");
-
-        list.addListener(new AssetSelectorListener(this, screen));
     }
 
     public void enable() {
@@ -47,7 +46,7 @@ public class AssetSelector {
         }
     }
 
-    public void changeNodeSound() {
+    public void updateNodeSound() {
         String sound = list.getSelected();
         actor.setSound(sound);
     }
@@ -60,6 +59,11 @@ public class AssetSelector {
         message.writeByte(list.getSelectedIndex(), 8);
 
         screen.getDataHandler().writeMessage(message);
+    }
+
+    public void setSelected(String sound) {
+        actor.setSound(sound);
+        list.setSelected(sound);
     }
 
     private Skin createSkin() {
@@ -82,5 +86,4 @@ public class AssetSelector {
         return skin;
     }
 
-    public List<String> getList() { return list; }
 }

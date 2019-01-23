@@ -51,10 +51,7 @@ public class DataHandler extends NetworkHandler {
 
                 if (node != null) {
                     String soundString = AssetMap.getNodeSoundString((int)sound);
-
-                    node.setSound(soundString);
-
-                    node.getNodeGestureListener().getList().setSelected(soundString);
+                    node.getNodeGestureListener().getAssetSelector().setSelected(soundString);
                 }
 
             } else if (param == 100) {
@@ -72,8 +69,7 @@ public class DataHandler extends NetworkHandler {
                 node.setPosition(x, y);
 
                 String soundString = AssetMap.getNodeSoundString((int)sound);
-                node.setSound(soundString);
-                node.getNodeGestureListener().getList().setSelected(soundString);
+                node.getNodeGestureListener().getAssetSelector().setSelected(soundString);
 
                 currentScreen.getStage().addActor(node);
 

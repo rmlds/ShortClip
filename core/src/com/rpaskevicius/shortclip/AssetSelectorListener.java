@@ -16,7 +16,7 @@ public class AssetSelectorListener extends ClickListener {
     @Override
     public void clicked(InputEvent event, float x, float y) {
         selector.disable();
-        selector.changeNodeSound();
+        selector.updateNodeSound();
         selector.deliverSelection();
     }
 

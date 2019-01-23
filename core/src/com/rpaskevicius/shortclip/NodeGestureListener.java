@@ -19,4 +19,6 @@ public class NodeGestureListener extends NetworkedPan {
         selector.enable();
     }
 
+    public AssetSelector getAssetSelector() { return selector; }
+
 }
