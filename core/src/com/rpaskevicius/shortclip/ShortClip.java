@@ -89,7 +89,7 @@ public class ShortClip extends ScreenAdapter {
 		InstrumentActor in = new InstrumentActor("XYZABCDE", 550, 100, this);
 		stage.addActor(in);
 		p.setInstrument(in);
-		
+
 	}
 
 	@Override

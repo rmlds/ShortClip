@@ -18,8 +18,6 @@ public class ScaleSelector extends AssetSelector {
     }
 
     @Override
-    public void deliverSelection() {
-        //TODO deliver scale to the server
-    }
+    public void deliverSelection() { deliverSelection(5); }
 
 }

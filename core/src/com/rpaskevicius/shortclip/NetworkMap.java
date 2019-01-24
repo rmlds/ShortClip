@@ -35,6 +35,8 @@ public class NetworkMap {
             return 0;
         } else if (selector instanceof InstrumentAssetSelector) {
             return 2;
+        } else if (selector instanceof ScaleSelector) { //PianoRoll
+            return 3;
         } else {
             return 44; //not found
         }

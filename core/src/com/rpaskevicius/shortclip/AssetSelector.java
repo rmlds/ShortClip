@@ -49,10 +49,12 @@ public class AssetSelector {
         }
     }
 
-    public void deliverSelection() {
+    public void deliverSelection() { deliverSelection(2); }
+
+    public void deliverSelection(int param) {
         NetworkMessage message = new NetworkMessage();
 
-        message.build(NetworkMap.getCode(this), 2, 9);
+        message.build(NetworkMap.getCode(this), param, 9);
         message.writeStr(actor.getID());
         message.writeByte(list.getSelectedIndex(), 8);
 
