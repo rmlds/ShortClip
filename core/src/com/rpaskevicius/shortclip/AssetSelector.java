@@ -10,26 +10,29 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class AssetSelector {
 
-    private NodeActor actor;
-    private ShortClip screen;
+    private NetworkedActor actor;
+    protected ShortClip screen;
 
     private List<String> list;
     private ScrollPane scrollPane;
 
     private boolean enabled;
 
-    public AssetSelector(NodeActor actor, ShortClip screen) {
+    public AssetSelector(NetworkedActor actor, ShortClip screen) {
         this.actor = actor;
         this.screen = screen;
 
         Skin skin = createSkin();
 
         list = new List<String>(skin, "list-style");
-        list.setItems(AssetMap.nodeSounds);
-        list.setSelected("kick-01.wav");
-        list.addListener(new AssetSelectorListener(this, screen));
+        list.addListener(new AssetSelectorListener(this));
 
         scrollPane = new ScrollPane(list, skin, "scroll-pane-style");
+    }
+
+    public void setup(String[] items, String selected) {
+        list.setItems(items);
+        list.setSelected(selected);
     }
 
     public void enable() {
@@ -46,15 +49,10 @@ public class AssetSelector {
         }
     }
 
-    public void updateNodeSound() {
-        String sound = list.getSelected();
-        actor.setSound(sound);
-    }
-
     public void deliverSelection() {
         NetworkMessage message = new NetworkMessage();
 
-        message.build(0, 2, 9);
+        message.build(NetworkMap.getCode(this), 2, 9);
         message.writeStr(actor.getID());
         message.writeByte(list.getSelectedIndex(), 8);
 
@@ -62,9 +60,12 @@ public class AssetSelector {
     }
 
     public void setSelected(String sound) {
-        actor.setSound(sound);
+        updateHost(sound);
         list.setSelected(sound);
     }
+
+    public void updateHost() { updateHost(list.getSelected()); }
+    public void updateHost(String selection) {}
 
     private Skin createSkin() {
         Skin skin = new Skin();

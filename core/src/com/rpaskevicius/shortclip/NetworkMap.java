@@ -30,4 +30,14 @@ public class NetworkMap {
         }
     }
 
+    public static int getCode(AssetSelector selector) {
+        if (selector instanceof NodeAssetSelector) {
+            return 0;
+        } else if (selector instanceof InstrumentAssetSelector) {
+            return 2;
+        } else {
+            return 44; //not found
+        }
+    }
+
 }

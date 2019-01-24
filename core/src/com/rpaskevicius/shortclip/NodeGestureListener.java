@@ -5,13 +5,13 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 public class NodeGestureListener extends NetworkedPan {
 
     private NodeActor actor;
-    private AssetSelector selector;
+    private NodeAssetSelector selector;
 
     public NodeGestureListener(NodeActor actor, ShortClip screen) {
         super(actor, screen);
         this.actor = actor;
 
-        selector = new AssetSelector(actor, screen);
+        selector = new NodeAssetSelector(actor, screen);
     }
 
     @Override
@@ -19,6 +19,6 @@ public class NodeGestureListener extends NetworkedPan {
         selector.enable();
     }
 
-    public AssetSelector getAssetSelector() { return selector; }
+    public NodeAssetSelector getAssetSelector() { return selector; }
 
 }

@@ -10,19 +10,14 @@ import com.badlogic.gdx.graphics.GL20;
 public class AssetLoadingScreen extends ScreenAdapter {
 
     private Game launchScreen;
-
     private AssetManager assetManager;
-
-    private String[] sounds;
 
     public AssetLoadingScreen(Game launchScreen) {
         this.launchScreen = launchScreen;
 
-        sounds = AssetMap.nodeSounds;
-
         assetManager = new AssetManager();
 
-        for (String sound : sounds) {
+        for (String sound : AssetMap.sounds) {
             assetManager.load(sound, Sound.class);
         }
 
