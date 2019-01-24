@@ -4,6 +4,8 @@ public class ScaleMap {
 
     public static final String[] scales = new String[] { "c", "c#", "d", "d#", "e", "f", "f#", "g", "g#", "a", "a#", "b" };
 
+    public static final String defaultScale = "e";
+
     public static String getScaleString(int index) { return scales[index]; }
 
     public static int[] genScaleMap(int root) {

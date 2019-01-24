@@ -28,7 +28,7 @@ public class InstrumentActor extends NetworkedActor implements VisualTarget {
 
         setBounds(getX(), getY(), background.getWidth(), background.getHeight());
 
-        setInstrument("bass");
+        setInstrument(AssetMap.defaultInstrument);
 
         this.listener = new InstrumentGestureListener(this, screen);
         addListener(this.listener);

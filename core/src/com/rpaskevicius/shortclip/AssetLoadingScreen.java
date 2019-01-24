@@ -21,8 +21,9 @@ public class AssetLoadingScreen extends ScreenAdapter {
             assetManager.load(sound, Sound.class);
         }
 
-        loadInstrument("piano");
-        loadInstrument("bass");
+        for (String instrument : AssetMap.instruments) {
+            loadInstrument(instrument);
+        }
     }
 
     @Override

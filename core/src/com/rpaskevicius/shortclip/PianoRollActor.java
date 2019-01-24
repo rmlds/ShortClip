@@ -1,9 +1,13 @@
 package com.rpaskevicius.shortclip;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 public class PianoRollActor extends NetworkedDuoplexedActor implements TimeListener, VisualOrigin {
     private Texture background;
@@ -21,10 +25,12 @@ public class PianoRollActor extends NetworkedDuoplexedActor implements TimeListe
     private InstrumentActor instrument;
     private int currentIndex = -1;
 
-    private int[] scaleMap = ScaleMap.genScaleMap("e");
+    private int[] scaleMap = ScaleMap.genScaleMap(ScaleMap.defaultScale);
 
     private float markerOffset;
     private Texture markerTexture = new Texture(Gdx.files.internal("piano-roll-marker.png"));
+
+    private TextButton scaleButton;
 
     public PianoRollActor(String ID, float x, float y, ShortClip currentScreen) {
         super(ID, 0);
@@ -46,11 +52,31 @@ public class PianoRollActor extends NetworkedDuoplexedActor implements TimeListe
         }
 
         effectiveArea = background.getWidth() - 32; // TODO similar to bound, resolve
+
+        //Scale selector
+        Skin skin = new Skin();
+
+        skin.add("default", new BitmapFont());
+        skin.add("scale-selector-texture", new Texture(Gdx.files.internal("ui-bpm.png")));
+
+        TextButton.TextButtonStyle scaleSelectorStyle = new TextButton.TextButtonStyle();
+        scaleSelectorStyle.up = skin.newDrawable("scale-selector-texture", Color.WHITE);
+        scaleSelectorStyle.down = skin.newDrawable("scale-selector-texture", Color.LIGHT_GRAY);
+        scaleSelectorStyle.font = skin.getFont("default");
+        skin.add("scale-selector", scaleSelectorStyle);
+
+        scaleButton = new TextButton(ScaleMap.defaultScale, skin, "scale-selector");
+        scaleButton.addListener(new ScaleButtonListener(this, currentScreen));
     }
 
     @Override
     public void act(float delta) {
         super.act(delta);
+
+        scaleButton.setPosition(
+            getX() + getWidth() - scaleButton.getWidth(),
+            getY() + getHeight() - scaleButton.getHeight()
+        );
     }
 
     @Override
@@ -64,8 +90,8 @@ public class PianoRollActor extends NetworkedDuoplexedActor implements TimeListe
             for (int stepIndex = 0; stepIndex < stepCount; stepIndex++) {
                 if (steps[toneIndex][stepIndex]) {
                     batch.draw(stepTexture,
-                            getX() + (stepIndex * stepWidth),
-                            getY() + (toneIndex * stepHeight)
+                        getX() + (stepIndex * stepWidth),
+                        getY() + (toneIndex * stepHeight)
                     );
                 }
             }
@@ -96,7 +122,7 @@ public class PianoRollActor extends NetworkedDuoplexedActor implements TimeListe
     public void onNextStep(int stepIndex) {
         setCurrentIndex(stepIndex);
 
-        if (instrument != null){
+        if (instrument != null) {
             for (int toneIndex = 0; toneIndex < 8; toneIndex++) {
                 if (steps[toneIndex][stepIndex]) {
                     //scaleMap[toneIndex] maps the toneIndex (0-7) to a scale (0-24)
@@ -145,5 +171,9 @@ public class PianoRollActor extends NetworkedDuoplexedActor implements TimeListe
 
     @Override
     public Vector2 getCursorPosition() { return listener.getCursorPosition(); }
+
+    public TextButton getScaleButton() { return scaleButton; }
+
+    public void setScaleMap(int[] scaleMap) { this.scaleMap = scaleMap; }
 
 }
