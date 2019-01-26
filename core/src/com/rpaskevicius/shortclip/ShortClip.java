@@ -240,6 +240,18 @@ public class ShortClip extends ScreenAdapter {
 		return null;
 	}
 
+	public InstrumentActor getInstrument(String ID) {
+		for (Actor actor : stage.getActors()) {
+			if (actor instanceof InstrumentActor) {
+				if (((InstrumentActor) actor).getID().equals(ID)) {
+					return ((InstrumentActor) actor);
+				}
+			}
+		}
+
+		return null;
+	}
+
 	public Button getPlayButton() {
 		return this.playButton;
 	}

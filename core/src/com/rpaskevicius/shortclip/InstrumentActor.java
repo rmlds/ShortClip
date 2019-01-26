@@ -64,4 +64,8 @@ public class InstrumentActor extends NetworkedActor implements VisualTarget {
 
         return localToStageCoordinates(new Vector2(pointX, pointY));
     }
+
+    public InstrumentGestureListener getListener() {
+        return listener;
+    }
 }

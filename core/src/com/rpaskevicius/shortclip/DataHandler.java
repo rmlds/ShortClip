@@ -103,7 +103,9 @@ public class DataHandler extends NetworkHandler {
 
                 SequencerActor sequencer = currentScreen.getSequencerByID(sequencerID);
 
-                if (sequencer != null) { sequencer.setPosition(x, y); }
+                if (sequencer != null) {
+                    sequencer.setPosition(x, y);
+                }
 
             } else if (param == 2) {
                 //update existing sequencer steps
@@ -114,7 +116,9 @@ public class DataHandler extends NetworkHandler {
 
                 SequencerActor sequencer = currentScreen.getSequencerByID(sequencerID);
 
-                if (sequencer != null) { sequencer.setSteps(steps); }
+                if (sequencer != null) {
+                    sequencer.setSteps(steps);
+                }
 
             } else if (param == 3) {
                 //create sequencer link
@@ -125,7 +129,9 @@ public class DataHandler extends NetworkHandler {
                 SequencerActor sequencer = currentScreen.getSequencerByID(sequencerID);
                 NodeActor node = currentScreen.getNodeByID(nodeID);
 
-                if ((sequencer != null) && (node != null)) { sequencer.setNode(node); }
+                if ((sequencer != null) && (node != null)) {
+                    sequencer.setNode(node);
+                }
 
             } else if (param == 4) {
                 //clear sequencer link
@@ -134,7 +140,9 @@ public class DataHandler extends NetworkHandler {
 
                 SequencerActor sequencer = currentScreen.getSequencerByID(sequencerID);
 
-                if (sequencer != null) { sequencer.clearNode(); }
+                if (sequencer != null) {
+                    sequencer.clearNode();
+                }
 
             } else if (param == 100) {
                 //server is sending an already existing sequencer to user
@@ -163,6 +171,68 @@ public class DataHandler extends NetworkHandler {
 
             } else if (param == 44) {
                 //sequencer not found
+            } else if (param == 40) {
+                //user requested an invalid param
+            } else {
+                //server sent an invalid param
+            }
+        } else if (action == 2) { //something about instruments
+            if (param == 0) {
+                //create new instrument
+
+                String ID = message.readStr(8);
+
+                int x = message.readInt(8);
+                int y = message.readInt(12);
+
+                InstrumentActor instrument = new InstrumentActor(ID, x, y, currentScreen);
+                currentScreen.getStage().addActor(instrument);
+
+            } else if (param == 1) {
+                //update existing instrument position
+
+                String ID = message.readStr(8);
+
+                int x = message.readInt(8);
+                int y = message.readInt(12);
+
+                InstrumentActor instrument = currentScreen.getInstrument(ID);
+
+                if (instrument != null) { instrument.setPosition(x, y); }
+
+            } else if (param == 2) {
+                //update existing instrument soundset
+
+                String ID = message.readStr(8);
+
+                byte soundset = message.readByte(16);
+
+                InstrumentActor instrument = currentScreen.getInstrument(ID);
+
+                if (instrument != null) {
+                    String instrumentString = AssetMap.getInstrumentString((int)soundset);
+                    instrument.getListener().getAssetSelector().setSelected(instrumentString);
+                }
+
+            } else if (param == 100) {
+                //server is sending an already existing instrument to user
+
+                String ID = message.readStr(8);
+
+                int x = message.readInt(8);
+                int y = message.readInt(12);
+
+                byte soundset = message.readByte(16);
+
+                InstrumentActor instrument = new InstrumentActor(ID, x, y, currentScreen);
+
+                String instrumentString = AssetMap.getInstrumentString((int)soundset);
+                instrument.getListener().getAssetSelector().setSelected(instrumentString);
+
+                currentScreen.getStage().addActor(instrument);
+
+            } else if (param == 44) {
+                //instrument not found
             } else if (param == 40) {
                 //user requested an invalid param
             } else {
