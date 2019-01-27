@@ -16,7 +16,7 @@ public class PianoRollActor extends NetworkedDuoplexedActor implements TimeListe
     private int stepCount = 16;
 
     private boolean[][] steps = new boolean[8][];
-    private Texture stepTexture = new Texture(Gdx.files.internal("piano-roll-pad.png"));
+    private Texture stepTexture = new Texture(Gdx.files.internal("piano-roll-pad-blue.png"));
 
     private float effectiveArea;
 
@@ -57,15 +57,15 @@ public class PianoRollActor extends NetworkedDuoplexedActor implements TimeListe
         Skin skin = new Skin();
 
         skin.add("default", new BitmapFont());
-        skin.add("scale-selector-texture", new Texture(Gdx.files.internal("ui-bpm.png")));
+        skin.add("scale-button-texture", new Texture(Gdx.files.internal("ui-scale-button.png")));
 
         TextButton.TextButtonStyle scaleSelectorStyle = new TextButton.TextButtonStyle();
-        scaleSelectorStyle.up = skin.newDrawable("scale-selector-texture", Color.WHITE);
-        scaleSelectorStyle.down = skin.newDrawable("scale-selector-texture", Color.LIGHT_GRAY);
+        scaleSelectorStyle.up = skin.newDrawable("scale-button-texture", Color.WHITE);
+        scaleSelectorStyle.down = skin.newDrawable("scale-button-texture", Color.LIGHT_GRAY);
         scaleSelectorStyle.font = skin.getFont("default");
-        skin.add("scale-selector", scaleSelectorStyle);
+        skin.add("scale-button", scaleSelectorStyle);
 
-        scaleButton = new TextButton(ScaleMap.defaultScale, skin, "scale-selector");
+        scaleButton = new TextButton(ScaleMap.defaultScale, skin, "scale-button");
         scaleButton.addListener(new ScaleButtonListener(this, currentScreen));
     }
 

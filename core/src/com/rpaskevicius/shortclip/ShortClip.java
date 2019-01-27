@@ -150,6 +150,8 @@ public class ShortClip extends ScreenAdapter {
 		//LowerUI
 		skin.add("ui-add-node-texture", new Texture(Gdx.files.internal("ui-add-node.png")));
 		skin.add("ui-add-sequencer-texture", new Texture(Gdx.files.internal("ui-add-sequencer.png")));
+		skin.add("ui-add-instrument-texture", new Texture(Gdx.files.internal("ui-add-instrument.png")));
+		skin.add("ui-add-piano-roll-texture", new Texture(Gdx.files.internal("ui-add-piano-roll.png")));
 
 		ButtonStyle addNodeStyle = new ButtonStyle();
 		addNodeStyle.up = skin.newDrawable("ui-add-node-texture", Color.WHITE);
@@ -161,6 +163,16 @@ public class ShortClip extends ScreenAdapter {
 		addSequencerStyle.down = skin.newDrawable("ui-add-sequencer-texture", Color.LIGHT_GRAY);
 		skin.add("ui-add-sequencer", addSequencerStyle);
 
+		ButtonStyle addInstrumentStyle = new ButtonStyle();
+		addInstrumentStyle.up = skin.newDrawable("ui-add-instrument-texture", Color.WHITE);
+		addInstrumentStyle.down = skin.newDrawable("ui-add-instrument-texture", Color.LIGHT_GRAY);
+		skin.add("ui-add-instrument", addInstrumentStyle);
+
+		ButtonStyle addPianoRollStyle = new ButtonStyle();
+		addPianoRollStyle.up = skin.newDrawable("ui-add-piano-roll-texture", Color.WHITE);
+		addPianoRollStyle.down = skin.newDrawable("ui-add-piano-roll-texture", Color.LIGHT_GRAY);
+		skin.add("ui-add-piano-roll", addPianoRollStyle);
+
 		return skin;
 	}
 
@@ -169,10 +181,16 @@ public class ShortClip extends ScreenAdapter {
 
 		Button addNode = new Button(skin, "ui-add-node");
 		Button addSequencer = new Button(skin, "ui-add-sequencer");
+		Button addInstrument = new Button(skin, "ui-add-instrument");
+		Button addPianoRoll = new Button(skin, "ui-add-piano-roll");
 
 		addNode.addListener(new NodeCreator(this));
 		addSequencer.addListener(new SequencerCreator(this));
+		addInstrument.addListener(new InstrumentCreator(this));
+		addPianoRoll.addListener(new PianoRollCreator(this));
 
+		lowerUI.add(addPianoRoll);
+		lowerUI.add(addInstrument);
 		lowerUI.add(addSequencer);
 		lowerUI.add(addNode);
 
