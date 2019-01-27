@@ -67,9 +67,11 @@ public class TimeDispatcher {
 
     public void dispatchStepEvents() {
         for (TimeListener listener : listeners) {
-            long stepDuration = sequenceDuration / listener.getStepCount();
+            //long stepDuration = sequenceDuration / listener.getStepCount();
+            //int stepIndex = (int) (sequencePartial / stepDuration);
 
-            int stepIndex = (int) (sequencePartial / stepDuration);
+            double stepDuration = (double)sequenceDuration / (double)listener.getStepCount();
+            int stepIndex = (int) ((double)sequencePartial / stepDuration);
 
             if (stepIndex > 15) { stepIndex = 15; }
 
