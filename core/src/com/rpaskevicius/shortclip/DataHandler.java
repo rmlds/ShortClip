@@ -160,11 +160,9 @@ public class DataHandler extends NetworkHandler {
 
                 sequencer.setSteps(steps);
 
-                if (message.readByte(32) != 0) {
-                    String nodeID = message.readStr(8, 32);
-                    NodeActor node = currentScreen.getNodeByID(nodeID);
-                    sequencer.setNode(node);
-                }
+                String nodeID = message.readStr(8, 32);
+                NodeActor node = currentScreen.getNodeByID(nodeID);
+                sequencer.setNode(node);
 
                 currentScreen.getTimeDispatcher().addListener(sequencer);
                 currentScreen.getStage().addActor(sequencer);
@@ -317,8 +315,46 @@ public class DataHandler extends NetworkHandler {
             } else if (param == 100) {
                 //server is sending existing piano roll
 
+                String ID = message.readStr(8);
+
+                int x = message.readInt(8);
+                int y = message.readInt(12);
+
+                String link = message.readStr(8, 16);
+
+                byte scale = message.readByte(24);
+
+                PianoRollActor pianoRoll = new PianoRollActor(ID, x, y, currentScreen);
+
+                InstrumentActor instrument = currentScreen.getInstrument(link);
+                pianoRoll.setInstrument(instrument);
+
+                String scaleString = ScaleMap.getScaleString((int)scale);
+                pianoRoll.getScaleButtonListener().getScaleSelector().setSelected(scaleString);
+
+                currentScreen.getTimeDispatcher().addListener(pianoRoll);
+                currentScreen.getStage().addActor(pianoRoll);
+                currentScreen.getStage().addActor(pianoRoll.getScaleButton());
+
             } else if (param == 101) {
                 //server is sending existing piano roll steps
+
+                String ID = message.readStr(8);
+
+                byte stepCount = message.readByte(8);
+
+                PianoRollActor pianoRoll = currentScreen.getPianoRoll(ID);
+
+                if (pianoRoll != null) {
+                    for (int i = 0; i < stepCount; i++) {
+                        byte absoluteStepIndex = message.readByte(9 + i);
+
+                        int toneIndex = absoluteStepIndex / pianoRoll.getStepCount();
+                        int stepIndex = absoluteStepIndex % pianoRoll.getStepCount();
+
+                        pianoRoll.setStepState(toneIndex, stepIndex, true);
+                    }
+                }
 
             } else if (param == 44) {
                 //sequencer not found
