@@ -27,7 +27,18 @@ public class PianoRollGestureListener extends NetworkedLinker {
                 actor.setStepState(toneIndex, stepIndex, true);
             }
 
-            //TODO send steps to the server
+            //send steps to the server
+            NetworkMessage message = new NetworkMessage();
+
+            int param = 3;
+            if (actor.getStepState(toneIndex, stepIndex)) { param = 2; }
+
+            message.build(NetworkMap.getCode(actor), param, 9);
+
+            message.writeStr(actor.getID());
+            message.writeByte(toneIndex * actor.getStepCount() + stepIndex, 8);
+
+            screen.getDataHandler().writeMessage(message);
         }
     }
 
@@ -39,12 +50,12 @@ public class PianoRollGestureListener extends NetworkedLinker {
             actor.clearInstrument();
             actor.setInstrument(instrument);
 
-            deliverReference(instrument);
+            deliverReference(instrument, 4);
 
         } else {
             actor.clearInstrument();
 
-            deliverClear();
+            deliverClear(5);
         }
     }
 

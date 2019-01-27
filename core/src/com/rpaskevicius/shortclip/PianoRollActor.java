@@ -31,6 +31,7 @@ public class PianoRollActor extends NetworkedDuoplexedActor implements TimeListe
     private Texture markerTexture = new Texture(Gdx.files.internal("piano-roll-marker.png"));
 
     private TextButton scaleButton;
+    private ScaleButtonListener scaleButtonListener;
 
     public PianoRollActor(String ID, float x, float y, ShortClip currentScreen) {
         super(ID, 0);
@@ -66,7 +67,9 @@ public class PianoRollActor extends NetworkedDuoplexedActor implements TimeListe
         skin.add("scale-button", scaleSelectorStyle);
 
         scaleButton = new TextButton(ScaleMap.defaultScale, skin, "scale-button");
-        scaleButton.addListener(new ScaleButtonListener(this, currentScreen));
+
+        this.scaleButtonListener = new ScaleButtonListener(this, currentScreen);
+        scaleButton.addListener(this.scaleButtonListener);
     }
 
     @Override
@@ -175,5 +178,9 @@ public class PianoRollActor extends NetworkedDuoplexedActor implements TimeListe
     public TextButton getScaleButton() { return scaleButton; }
 
     public void setScaleMap(int[] scaleMap) { this.scaleMap = scaleMap; }
+
+    public ScaleButtonListener getScaleButtonListener() {
+        return scaleButtonListener;
+    }
 
 }

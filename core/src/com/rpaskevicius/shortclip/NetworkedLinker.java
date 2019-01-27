@@ -22,20 +22,20 @@ public class NetworkedLinker extends NetworkedDuoplexedPan {
         return actor.getStage().hit(hitPoint.x, hitPoint.y, false);
     }
 
-    public void deliverReference(NetworkedActor target) {
+    public void deliverReference(NetworkedActor target, int param) {
         NetworkMessage message = new NetworkMessage();
 
-        message.build(NetworkMap.getCode(actor), 3, 16);
+        message.build(NetworkMap.getCode(actor), param, 16);
         message.writeStr(actor.getID());
         message.writeStr(target.getID(), 8);
 
         screen.getDataHandler().writeMessage(message);
     }
 
-    public void deliverClear() {
+    public void deliverClear(int param) {
         NetworkMessage message = new NetworkMessage();
 
-        message.build(NetworkMap.getCode(actor), 4, 8);
+        message.build(NetworkMap.getCode(actor), param, 8);
         message.writeStr(actor.getID());
 
         screen.getDataHandler().writeMessage(message);

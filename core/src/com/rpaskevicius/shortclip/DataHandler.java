@@ -238,6 +238,96 @@ public class DataHandler extends NetworkHandler {
             } else {
                 //server sent an invalid param
             }
+
+        } else if (action == 3) { //something about piano rolls
+            if (param == 0) {
+                //create new piano roll
+
+                String ID = message.readStr(8);
+
+                int x = message.readInt(8);
+                int y = message.readInt(12);
+
+                PianoRollActor pianoRoll = new PianoRollActor(ID, x, y, currentScreen);
+
+                currentScreen.getTimeDispatcher().addListener(pianoRoll);
+                currentScreen.getStage().addActor(pianoRoll);
+                currentScreen.getStage().addActor(pianoRoll.getScaleButton());
+
+            } else if (param == 1) {
+                //update existing piano roll position
+
+                String ID = message.readStr(8);
+
+                int x = message.readInt(8);
+                int y = message.readInt(12);
+
+                PianoRollActor pianoRoll = currentScreen.getPianoRoll(ID);
+
+                if (pianoRoll != null) {
+                    pianoRoll.setPosition(x, y);
+                }
+
+            } else if (param == 2) {
+                //set existing piano roll step
+                setPianoRollStep(true);
+
+            } else if (param == 3) {
+                //clear existing piano roll step
+                setPianoRollStep(false);
+
+            } else if (param == 4) {
+                //set piano roll link
+
+                String ID = message.readStr(8);
+                String link = message.readStr(8, 16);
+
+                PianoRollActor pianoRoll = currentScreen.getPianoRoll(ID);
+                InstrumentActor instrument = currentScreen.getInstrument(link);
+
+                if ((pianoRoll != null) && (instrument != null)) {
+                    pianoRoll.setInstrument(instrument);
+                }
+
+            } else if (param == 5) {
+                //clear piano roll link
+
+                String ID = message.readStr(8);
+
+                PianoRollActor pianoRoll = currentScreen.getPianoRoll(ID);
+
+                if (pianoRoll != null) {
+                    pianoRoll.clearInstrument();
+                }
+
+            } else if (param == 6) {
+                //update piano roll scale
+
+                String ID = message.readStr(8);
+
+                byte scale = message.readByte(24);
+
+                PianoRollActor pianoRoll = currentScreen.getPianoRoll(ID);
+
+                if (pianoRoll != null) {
+                    String scaleString = ScaleMap.getScaleString((int)scale);
+                    pianoRoll.getScaleButtonListener().getScaleSelector().setSelected(scaleString);
+                }
+
+            } else if (param == 100) {
+                //server is sending existing piano roll
+
+            } else if (param == 101) {
+                //server is sending existing piano roll steps
+
+            } else if (param == 44) {
+                //sequencer not found
+            } else if (param == 40) {
+                //user requested an invalid param
+            } else {
+                //server sent an invalid param
+            }
+
         } else if (action == 10) { // start/stop
             if (param == 0) {
                 //start playback
@@ -283,6 +373,22 @@ public class DataHandler extends NetworkHandler {
             //user requested an invalid action
         } else {
             //server sent an invalid action
+        }
+    }
+
+    private void setPianoRollStep(boolean state) {
+        String ID = message.readStr(8);
+
+        byte index = message.readByte(8);
+
+        PianoRollActor pianoRoll = currentScreen.getPianoRoll(ID);
+
+        int toneIndex = index / pianoRoll.getStepCount();
+        int stepIndex = index % pianoRoll.getStepCount();
+
+        //noinspection ConstantConditions
+        if (pianoRoll != null) {
+            pianoRoll.setStepState(toneIndex, stepIndex, state);
         }
     }
 }

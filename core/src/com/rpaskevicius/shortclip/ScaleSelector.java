@@ -18,6 +18,6 @@ public class ScaleSelector extends AssetSelector {
     }
 
     @Override
-    public void deliverSelection() { deliverSelection(5); }
+    public void deliverSelection() { deliverSelection(6); }
 
 }

@@ -79,17 +79,6 @@ public class ShortClip extends ScreenAdapter {
 		//Sequencer and node connection visualizer
 		this.connectionVisualizer = new ConnectionVisualizer(this);
 
-		//--------------------------------------
-
-		PianoRollActor p = new PianoRollActor("ABCDEFGH", 0, 0, this);
-		time.addListener(p);
-		stage.addActor(p);
-		stage.addActor(p.getScaleButton());
-
-		InstrumentActor in = new InstrumentActor("XYZABCDE", 550, 100, this);
-		stage.addActor(in);
-		p.setInstrument(in);
-
 	}
 
 	@Override
@@ -263,6 +252,18 @@ public class ShortClip extends ScreenAdapter {
 			if (actor instanceof InstrumentActor) {
 				if (((InstrumentActor) actor).getID().equals(ID)) {
 					return ((InstrumentActor) actor);
+				}
+			}
+		}
+
+		return null;
+	}
+
+	public PianoRollActor getPianoRoll(String ID) {
+		for (Actor actor : stage.getActors()) {
+			if (actor instanceof PianoRollActor) {
+				if (((PianoRollActor) actor).getID().equals(ID)) {
+					return ((PianoRollActor) actor);
 				}
 			}
 		}

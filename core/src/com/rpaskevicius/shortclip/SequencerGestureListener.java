@@ -43,12 +43,12 @@ public class SequencerGestureListener extends NetworkedLinker {
             actor.clearNode();
             actor.setNode(node);
 
-            deliverReference(node);
+            deliverReference(node, 3);
 
         } else {
             actor.clearNode();
 
-            deliverClear();
+            deliverClear(4);
         }
     }
 
