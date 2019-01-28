@@ -9,7 +9,7 @@ public class TimeDispatcher {
 
     private List<TimeListener> listeners;
 
-    private float bpm;
+    private double bpm;
 
     private long startTime;
     private long runningTime;
@@ -23,7 +23,7 @@ public class TimeDispatcher {
     private long sequencePartial;
 
     public TimeDispatcher(float bpm) {
-        this.bpm = bpm;
+        this.bpm = (double)bpm;
 
         recalcDurations();
 
@@ -37,7 +37,7 @@ public class TimeDispatcher {
     public void start() {
         runningTime = 0;
 
-        startTime = TimeUtils.millis();
+        startTime = TimeUtils.nanoTime();
 
         isRunning = true;
     }
@@ -51,7 +51,7 @@ public class TimeDispatcher {
     public void update() {
         if (isRunning) {
             previousTime = runningTime;
-            runningTime = TimeUtils.timeSinceMillis(startTime);
+            runningTime = TimeUtils.timeSinceNanos(startTime);
 
             long delta = runningTime - previousTime;
 
@@ -96,16 +96,19 @@ public class TimeDispatcher {
     }
 
     public float getBpm() {
-        return bpm;
+        return (float)bpm;
     }
 
     public void setBpm(float bpm) {
-        this.bpm = bpm;
+        this.bpm = (double)bpm;
         recalcDurations();
     }
 
     public void recalcDurations() {
-        beatDuration = (long) (60000.0f / bpm); //how long does a single beat last in millis.
-        sequenceDuration = beatDuration * 4; //how long does entire sequence last in millis. 4 -> 4 beats
+        //beatDuration = (long) (60000.0f / bpm); //how long does a single beat last in millis.
+        //sequenceDuration = beatDuration * 4; //how long does entire sequence last in millis. 4 -> 4 beats
+
+        beatDuration = (long) (60000000000.0 / bpm); //how long does a single beat last in nanos.
+        sequenceDuration = beatDuration * 4; //how long does entire sequence last in nanos. 4 -> 4 beats
     }
 }
