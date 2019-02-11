@@ -27,6 +27,7 @@ public class DataHandler extends NetworkHandler {
 
                 NodeActor node = new NodeActor(nodeID, x, y, "node-purple-w-connector.png", "kick-01.wav", currentScreen.getAssetManager(), currentScreen);
                 currentScreen.getStage().addActor(node);
+                currentScreen.getStage().addActor(node.getVolumeSelector());
 
             } else if (param == 1) {
                 //update existing node position
@@ -52,6 +53,20 @@ public class DataHandler extends NetworkHandler {
                 if (node != null) {
                     String soundString = AssetMap.getSoundString((int)sound);
                     node.getNodeGestureListener().getAssetSelector().setSelected(soundString);
+                }
+
+            } else if (param == 3) {
+                //update existing node volume
+
+                String nodeID = message.readStr(8);
+
+                int volume = message.readInt(8);
+
+                NodeActor node = currentScreen.getNodeByID(nodeID);
+
+                if (node != null) {
+                    node.setVolume(volume);
+                    node.getVolumeSelector().setText(Integer.toString((int)(volume * 100.0f)));
                 }
 
             } else if (param == 100) {

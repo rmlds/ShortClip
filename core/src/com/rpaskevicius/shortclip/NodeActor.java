@@ -3,9 +3,13 @@ package com.rpaskevicius.shortclip;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 public class NodeActor extends NetworkedActor implements VisualTarget {
     private Texture texture;
@@ -14,6 +18,11 @@ public class NodeActor extends NetworkedActor implements VisualTarget {
     private AssetManager assetManager;
 
     private NodeGestureListener nodeGestureListener;
+
+    private float volume = 1.0f;
+
+    private TextButton volumeSelector;
+    private VolumeSelectorListener volumeSelectorListener;
 
     public NodeActor(String ID, float x, float y, String textureName, String soundName, AssetManager assetManager, ShortClip currentScreen) {
         super(ID);
@@ -29,15 +38,38 @@ public class NodeActor extends NetworkedActor implements VisualTarget {
 
         this.nodeGestureListener = new NodeGestureListener(this, currentScreen);
         addListener(this.nodeGestureListener);
+
+        //Volume button
+        Skin skin = new Skin();
+
+        skin.add("default", new BitmapFont());
+        skin.add("volume-selector-texture", new Texture(Gdx.files.internal("ui-bpm.png")));
+
+        TextButton.TextButtonStyle volumeSelectorStyle = new TextButton.TextButtonStyle();
+        volumeSelectorStyle.up = skin.newDrawable("volume-selector-texture", Color.WHITE);
+        volumeSelectorStyle.down = skin.newDrawable("volume-selector-texture", Color.LIGHT_GRAY);
+        volumeSelectorStyle.font = skin.getFont("default");
+        skin.add("volume-selector", volumeSelectorStyle);
+
+        volumeSelector = new TextButton(Integer.toString((int)(volume * 100.0f)), skin, "volume-selector");
+
+        this.volumeSelectorListener = new VolumeSelectorListener(this, currentScreen);
+        volumeSelector.addListener(this.volumeSelectorListener);
+
     }
 
     public void play(){
-        sound.play(1.0f);
+        sound.play(volume);
     }
 
     @Override
     public void act(float delta) {
         super.act(delta);
+
+        volumeSelector.setPosition(
+                getX() + getWidth() / 2.0f,
+                getY() + getHeight() / 2.0f
+        );
     }
 
     @Override
@@ -60,4 +92,21 @@ public class NodeActor extends NetworkedActor implements VisualTarget {
 
         return localToStageCoordinates(new Vector2(pointX, pointY));
     }
+
+    public float getVolume() {
+        return volume;
+    }
+
+    public void setVolume(float volume) {
+        this.volume = volume;
+    }
+
+    public TextButton getVolumeSelector() {
+        return volumeSelector;
+    }
+
+    public VolumeSelectorListener getVolumeSelectorListener() {
+        return volumeSelectorListener;
+    }
+
 }
