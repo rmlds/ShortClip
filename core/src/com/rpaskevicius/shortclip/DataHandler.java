@@ -60,13 +60,13 @@ public class DataHandler extends NetworkHandler {
 
                 String nodeID = message.readStr(8);
 
-                int volume = message.readInt(8);
+                int volume = (int)message.readByte(17);
 
                 NodeActor node = currentScreen.getNodeByID(nodeID);
 
                 if (node != null) {
-                    node.setVolume(volume);
-                    node.getVolumeSelector().setText(Integer.toString((int)(volume * 100.0f)));
+                    node.setVolume((float)(volume) / 100.0f);
+                    node.getVolumeSelector().setText(Integer.toString(volume));
                 }
 
             } else if (param == 100) {
@@ -79,6 +79,8 @@ public class DataHandler extends NetworkHandler {
 
                 byte sound = message.readByte(16);
 
+                int volume = (int)message.readByte(17);
+
                 NodeActor node = new NodeActor(nodeID, x, y, "node-purple-w-connector.png", "kick-01.wav", currentScreen.getAssetManager(), currentScreen);
 
                 node.setPosition(x, y);
@@ -86,7 +88,11 @@ public class DataHandler extends NetworkHandler {
                 String soundString = AssetMap.getSoundString((int)sound);
                 node.getNodeGestureListener().getAssetSelector().setSelected(soundString);
 
+                node.setVolume((float)(volume) / 100.0f);
+                node.getVolumeSelector().setText(Integer.toString(volume));
+
                 currentScreen.getStage().addActor(node);
+                currentScreen.getStage().addActor(node.getVolumeSelector());
 
             } else if (param == 44) {
                 //node not found

@@ -35,10 +35,11 @@ public class VolumeSelectorListener extends DragListener {
     public void deliverVolume(float volume) {
         NetworkMessage message = new NetworkMessage();
 
-        message.build(NetworkMap.getCode(actor), 3, 12);
+        message.build(NetworkMap.getCode(actor), 3, 9);
         message.writeStr(actor.getID());
-        message.writeInt((int)(volume * 100.0f), 8);
+        message.writeByte((int)(volume * 100.0f), 8);
 
         screen.getDataHandler().writeMessage(message);
     }
+
 }
