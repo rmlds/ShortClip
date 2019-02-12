@@ -65,7 +65,7 @@ public class DataHandler extends NetworkHandler {
                 NodeActor node = currentScreen.getNodeByID(nodeID);
 
                 if (node != null) {
-                    node.setVolume((float)(volume) / 100.0f);
+                    node.setVolume(volume);
                     node.getVolumeSelector().setText(Integer.toString(volume));
                 }
 
@@ -88,7 +88,7 @@ public class DataHandler extends NetworkHandler {
                 String soundString = AssetMap.getSoundString((int)sound);
                 node.getNodeGestureListener().getAssetSelector().setSelected(soundString);
 
-                node.setVolume((float)(volume) / 100.0f);
+                node.setVolume(volume);
                 node.getVolumeSelector().setText(Integer.toString(volume));
 
                 currentScreen.getStage().addActor(node);

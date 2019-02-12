@@ -18,26 +18,26 @@ public class VolumeSelectorListener extends DragListener {
 
     @Override
     public void drag(InputEvent event, float x, float y, int pointer) {
-        float volume = actor.getVolume() - getDeltaY() / 100.0f;
+        int volume = actor.getVolume() - (int)getDeltaY();
 
-        if (volume < 0.0f) {
-            volume = 0.0f;
-        } else if (volume > 1.0f) {
-            volume = 1.0f;
+        if (volume < 0) {
+            volume = 0;
+        } else if (volume > 100) {
+            volume = 100;
         }
 
         actor.setVolume(volume);
-        actor.getVolumeSelector().setText(Integer.toString((int)(volume * 100.0f)));
+        actor.getVolumeSelector().setText(Integer.toString(volume));
 
         deliverVolume(volume);
     }
 
-    public void deliverVolume(float volume) {
+    public void deliverVolume(int volume) {
         NetworkMessage message = new NetworkMessage();
 
         message.build(NetworkMap.getCode(actor), 3, 9);
         message.writeStr(actor.getID());
-        message.writeByte((int)(volume * 100.0f), 8);
+        message.writeByte(volume, 8);
 
         screen.getDataHandler().writeMessage(message);
     }

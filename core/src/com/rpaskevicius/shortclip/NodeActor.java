@@ -93,12 +93,18 @@ public class NodeActor extends NetworkedActor implements VisualTarget {
         return localToStageCoordinates(new Vector2(pointX, pointY));
     }
 
-    public float getVolume() {
-        return volume;
+    public int getVolume() {
+        return (int)(volume * 100.0f);
     }
 
-    public void setVolume(float volume) {
-        this.volume = volume;
+    public void setVolume(int volume) {
+        if (volume < 0) {
+            volume = 0;
+        } else if (volume > 100) {
+            volume = 100;
+        }
+
+        this.volume = (float)(volume) / 100.0f;
     }
 
     public TextButton getVolumeSelector() {
