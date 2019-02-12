@@ -43,7 +43,7 @@ public class NodeActor extends NetworkedActor implements VisualTarget {
         Skin skin = new Skin();
 
         skin.add("default", new BitmapFont());
-        skin.add("volume-selector-texture", new Texture(Gdx.files.internal("ui-bpm.png")));
+        skin.add("volume-selector-texture", new Texture(Gdx.files.internal("ui-volume-selector.png")));
 
         TextButton.TextButtonStyle volumeSelectorStyle = new TextButton.TextButtonStyle();
         volumeSelectorStyle.up = skin.newDrawable("volume-selector-texture", Color.WHITE);
@@ -67,8 +67,8 @@ public class NodeActor extends NetworkedActor implements VisualTarget {
         super.act(delta);
 
         volumeSelector.setPosition(
-                getX() + getWidth() / 2.0f,
-                getY() + getHeight() / 2.0f
+                getX() + getWidth() / 2.0f + volumeSelector.getWidth() / 2.0f,
+                getY() + getHeight() / 2.0f - volumeSelector.getHeight() / 2.0f
         );
     }
 
