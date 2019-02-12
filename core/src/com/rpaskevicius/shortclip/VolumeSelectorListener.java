@@ -3,15 +3,12 @@ package com.rpaskevicius.shortclip;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-
 public class VolumeSelectorListener extends DragListener {
 
-    private NodeActor actor;
+    private VolumeActor actor;
     private ShortClip screen;
 
-    public VolumeSelectorListener(NodeActor actor, ShortClip screen) {
+    public VolumeSelectorListener(VolumeActor actor, ShortClip screen) {
         this.actor = actor;
         this.screen = screen;
     }

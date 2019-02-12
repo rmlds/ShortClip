@@ -42,4 +42,14 @@ public class NetworkMap {
         }
     }
 
+    public static int getCode(VolumeActor actor) {
+        if (actor instanceof NodeActor) {
+            return 0;
+        } else if (actor instanceof InstrumentActor) {
+            return 2;
+        } else {
+            return 44; //not found
+        }
+    }
+
 }

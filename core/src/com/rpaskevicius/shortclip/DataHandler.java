@@ -206,6 +206,7 @@ public class DataHandler extends NetworkHandler {
 
                 InstrumentActor instrument = new InstrumentActor(ID, x, y, currentScreen);
                 currentScreen.getStage().addActor(instrument);
+                currentScreen.getStage().addActor(instrument.getVolumeSelector());
 
             } else if (param == 1) {
                 //update existing instrument position
@@ -233,6 +234,20 @@ public class DataHandler extends NetworkHandler {
                     instrument.getListener().getAssetSelector().setSelected(instrumentString);
                 }
 
+            } else if (param == 3) {
+                //update existing instrument volume
+
+                String ID = message.readStr(8);
+
+                int volume = (int)message.readByte(17);
+
+                InstrumentActor instrument = currentScreen.getInstrument(ID);
+
+                if (instrument != null) {
+                    instrument.setVolume(volume);
+                    instrument.getVolumeSelector().setText(Integer.toString(volume));
+                }
+
             } else if (param == 100) {
                 //server is sending an already existing instrument to user
 
@@ -243,12 +258,18 @@ public class DataHandler extends NetworkHandler {
 
                 byte soundset = message.readByte(16);
 
+                int volume = (int)message.readByte(17);
+
                 InstrumentActor instrument = new InstrumentActor(ID, x, y, currentScreen);
 
                 String instrumentString = AssetMap.getInstrumentString((int)soundset);
                 instrument.getListener().getAssetSelector().setSelected(instrumentString);
 
+                instrument.setVolume(volume);
+                instrument.getVolumeSelector().setText(Integer.toString(volume));
+
                 currentScreen.getStage().addActor(instrument);
+                currentScreen.getStage().addActor(instrument.getVolumeSelector());
 
             } else if (param == 44) {
                 //instrument not found

@@ -3,15 +3,12 @@ package com.rpaskevicius.shortclip;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
-public class NodeActor extends NetworkedActor implements VisualTarget {
+public class NodeActor extends NetworkedActor implements VisualTarget, VolumeActor {
     private Texture texture;
     private Sound sound;
 
@@ -39,19 +36,8 @@ public class NodeActor extends NetworkedActor implements VisualTarget {
         this.nodeGestureListener = new NodeGestureListener(this, currentScreen);
         addListener(this.nodeGestureListener);
 
-        //Volume button
-        Skin skin = new Skin();
-
-        skin.add("default", new BitmapFont());
-        skin.add("volume-selector-texture", new Texture(Gdx.files.internal("ui-volume-selector.png")));
-
-        TextButton.TextButtonStyle volumeSelectorStyle = new TextButton.TextButtonStyle();
-        volumeSelectorStyle.up = skin.newDrawable("volume-selector-texture", Color.WHITE);
-        volumeSelectorStyle.down = skin.newDrawable("volume-selector-texture", Color.LIGHT_GRAY);
-        volumeSelectorStyle.font = skin.getFont("default");
-        skin.add("volume-selector", volumeSelectorStyle);
-
-        volumeSelector = new TextButton(Integer.toString((int)(volume * 100.0f)), skin, "volume-selector");
+        //Volume selector
+        volumeSelector = UIGenerator.genVolumeSelector();
 
         this.volumeSelectorListener = new VolumeSelectorListener(this, currentScreen);
         volumeSelector.addListener(this.volumeSelectorListener);
