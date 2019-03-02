@@ -141,3 +141,10 @@ idea {
         }
     }
 }
+
+buildscript {
+    repositories {
+        jcenter()
+        google()
+    }
+}

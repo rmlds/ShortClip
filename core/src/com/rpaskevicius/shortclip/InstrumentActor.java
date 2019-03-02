@@ -62,7 +62,7 @@ public class InstrumentActor extends NetworkedActor implements VisualTarget, Vol
     }
 
     public void play(int tone){
-        tones[tone].play(1.0f);
+        tones[tone].play(volume);
     }
 
     public void setInstrument(String instrument) {

@@ -29,9 +29,11 @@ public class MainMenuScreen extends ScreenAdapter {
         this.launchScreen = launchScreen;
         this.assetManager = assetManager;
 
+        /*
         System.out.println("Connecting...");
-        socket = Gdx.net.newClientSocket(Net.Protocol.TCP, "localhost", 13, null);
+        socket = Gdx.net.newClientSocket(Net.Protocol.TCP, "172.22.158.6", 80, null);
         System.out.println("Connected successfully.");
+        */
 
         initHandler = new InitHandler(socket, this);
 
@@ -53,7 +55,7 @@ public class MainMenuScreen extends ScreenAdapter {
         table.add(mainUI).expand(); //.top().left();
 
         stageUI.addActor(table);
-		stageUI.setDebugAll(true);
+		//stageUI.setDebugAll(true);
     }
 
     @Override
@@ -63,7 +65,9 @@ public class MainMenuScreen extends ScreenAdapter {
         Gdx.gl.glClearColor(0.2f, 0, 0.3f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT | (Gdx.graphics.getBufferFormat().coverageSampling?GL20.GL_COVERAGE_BUFFER_BIT_NV:0));
 
-        initHandler.readMessage();
+        if (socket != null && socket.isConnected()) {
+            initHandler.readMessage();
+        }
 
         stage.act(deltaTime);
         stage.draw();
@@ -86,6 +90,20 @@ public class MainMenuScreen extends ScreenAdapter {
         skin.add("default", new BitmapFont());
 
         skin.add("text-button-texture", new Texture(Gdx.files.internal("list-selected.png")));
+
+        //Connection UI
+        TextButton.TextButtonStyle connectStyle = new TextButton.TextButtonStyle();
+        connectStyle.up = skin.newDrawable("text-button-texture", Color.WHITE);
+        connectStyle.down = skin.newDrawable("text-button-texture", Color.LIGHT_GRAY);
+        connectStyle.font = skin.getFont("default");
+        skin.add("ui-connect", connectStyle);
+
+        TextField.TextFieldStyle connectFieldStyle = new TextField.TextFieldStyle();
+        connectFieldStyle.background = skin.newDrawable("text-button-texture", Color.LIGHT_GRAY);
+        connectFieldStyle.font = skin.getFont("default");
+        connectFieldStyle.fontColor = Color.WHITE;
+        skin.add("ui-connect-field", connectFieldStyle);
+        //Connection UI end
 
         TextButton.TextButtonStyle createRoomStyle = new TextButton.TextButtonStyle();
         createRoomStyle.up = skin.newDrawable("text-button-texture", Color.WHITE);
@@ -116,6 +134,9 @@ public class MainMenuScreen extends ScreenAdapter {
     private Table createMainUI(Skin skin) {
         Table mainUI = new Table();
 
+        TextButton connect = new TextButton("connect", skin, "ui-connect");
+        TextField connectField = new TextField("172.22.158.6", skin, "ui-connect-field");
+
         TextButton createRoom = new TextButton("create room", skin, "ui-create-room");
         TextButton joinRoom = new TextButton("join room", skin, "ui-join-room");
         TextField textField = new TextField("HUMEAYLN", skin, "ui-text-field");
@@ -123,6 +144,12 @@ public class MainMenuScreen extends ScreenAdapter {
 
         createRoom.addListener(new CreateRoomListener(initHandler));
         joinRoom.addListener(new JoinRoomListener(initHandler, textField, errorLabel));
+        connect.addListener(new ConnectListener(this, connectField));
+
+        mainUI.add(connect);
+        mainUI.row();
+        mainUI.add(connectField).padBottom(30f);
+        mainUI.row();
 
         mainUI.add(createRoom);
         mainUI.row();
@@ -145,5 +172,10 @@ public class MainMenuScreen extends ScreenAdapter {
 
     public Label getErrorLabel() {
         return errorLabel;
+    }
+
+    public void setSocket(Socket socket) {
+        this.socket = socket;
+        initHandler.setSocket(socket);
     }
 }

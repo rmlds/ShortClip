@@ -57,4 +57,8 @@ public class InitHandler extends NetworkHandler {
                 new ShortClip(currentScreen.getLaunchScreen(), currentScreen.getAssetManager(), socket, roomID)
         );
     }
+
+    public void setSocket(Socket socket) {
+        super.socket = socket;
+    }
 }
