@@ -20,12 +20,17 @@ public class NetworkedPan extends ActorGestureListener {
     }
 
     public void offsetPosition(float deltaX, float deltaY) {
-        float newX = actor.getX() + deltaX;
-        float newY = actor.getY() + deltaY;
+        if (Math.abs(deltaX) > 0.1f || Math.abs(deltaY) > 0.1f) {
+            //prevents spamming the server with packets when
+            //the finger is held in place (only needed for Android)
 
-        actor.setPosition(newX, newY);
+            float newX = actor.getX() + deltaX;
+            float newY = actor.getY() + deltaY;
 
-        deliverPosition(newX, newY);
+            actor.setPosition(newX, newY);
+
+            deliverPosition(newX, newY);
+        }
     }
 
     public void deliverPosition(float newX, float newY) {

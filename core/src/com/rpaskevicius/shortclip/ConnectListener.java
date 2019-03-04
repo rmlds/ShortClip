@@ -1,5 +1,6 @@
 package com.rpaskevicius.shortclip;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -27,7 +28,10 @@ public class ConnectListener extends ClickListener {
 
             System.out.println("Connect clicked. Connecting to " + IP + "...");
 
-            screen.setSocket(Gdx.net.newClientSocket(Net.Protocol.TCP, IP, 80, null));
+            Gdx.app.setLogLevel(Application.LOG_DEBUG);
+            Gdx.app.debug("BUTTON", "Connecting...");
+
+            //screen.setSocket(Gdx.net.newClientSocket(Net.Protocol.TCP, "172.22.158.6", 80, null));
 
             System.out.println("Connected to " + IP);
         } else {

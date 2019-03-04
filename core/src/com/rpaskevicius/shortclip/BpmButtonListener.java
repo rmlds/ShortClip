@@ -17,6 +17,10 @@ public class BpmButtonListener extends DragListener {
 
     @Override
     public void drag(InputEvent event, float x, float y, int pointer) {
+        if (Math.abs(getDeltaX()) < 0.1f) {
+            return;
+        }
+
         float bpm = currentScreen.getTimeDispatcher().getBpm() - getDeltaX();
 
         if (bpm < 40.0f) {

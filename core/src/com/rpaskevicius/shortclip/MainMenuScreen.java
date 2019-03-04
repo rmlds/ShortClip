@@ -29,6 +29,12 @@ public class MainMenuScreen extends ScreenAdapter {
         this.launchScreen = launchScreen;
         this.assetManager = assetManager;
 
+        try {
+            socket = Gdx.net.newClientSocket(Net.Protocol.TCP, "10.20.251.149", 80, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+        }
         /*
         System.out.println("Connecting...");
         socket = Gdx.net.newClientSocket(Net.Protocol.TCP, "172.22.158.6", 80, null);

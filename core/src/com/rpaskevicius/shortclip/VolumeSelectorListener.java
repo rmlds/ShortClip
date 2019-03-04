@@ -15,7 +15,13 @@ public class VolumeSelectorListener extends DragListener {
 
     @Override
     public void drag(InputEvent event, float x, float y, int pointer) {
-        int volume = actor.getVolume() - (int)getDeltaY();
+        int deltaY = (int) getDeltaY();
+
+        if (deltaY == 0) {
+            return;
+        }
+
+        int volume = actor.getVolume() - deltaY;
 
         if (volume < 0) {
             volume = 0;
