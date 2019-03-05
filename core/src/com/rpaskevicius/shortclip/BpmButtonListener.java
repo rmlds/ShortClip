@@ -17,19 +17,29 @@ public class BpmButtonListener extends DragListener {
 
     @Override
     public void drag(InputEvent event, float x, float y, int pointer) {
-        if (Math.abs(getDeltaX()) < 0.1f) {
+        float deltaX = -getDeltaX();
+
+        if (Math.abs(deltaX) < 0.1f) {
             return;
         }
 
-        float bpm = currentScreen.getTimeDispatcher().getBpm() - getDeltaX();
+        float currentBPM = currentScreen.getTimeDispatcher().getBpm();
 
-        if (bpm < 40.0f) {
-            bpm = 40.0f;
-        } else if (bpm > 240.0f) {
-            bpm = 240.0f;
+        if (currentBPM < 40.1f && deltaX < 0) {
+            return;
+        } else if (currentBPM > 239.9f && deltaX > 0) {
+            return;
         }
 
-        currentScreen.getTimeDispatcher().setBpm(bpm);
+        float newBPM = currentBPM + deltaX;
+
+        if (newBPM < 40.0f) {
+            newBPM = 40.0f;
+        } else if (newBPM > 240.0f) {
+            newBPM = 240.0f;
+        }
+
+        currentScreen.getTimeDispatcher().setBpm(newBPM);
 
         button.setText((int)currentScreen.getTimeDispatcher().getBpm() + "");
 
@@ -37,8 +47,9 @@ public class BpmButtonListener extends DragListener {
         NetworkMessage message = new NetworkMessage();
         message.build(11, 0, 4);
 
-        message.writeInt((int)bpm, 0);
+        message.writeInt((int)newBPM, 0);
 
         currentScreen.getDataHandler().writeMessage(message);
     }
+
 }
