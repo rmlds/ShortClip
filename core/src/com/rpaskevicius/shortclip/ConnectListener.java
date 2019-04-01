@@ -24,14 +24,14 @@ public class ConnectListener extends ClickListener {
         if (!connected) {
             connected = true;
 
-            String IP = connectField.getText();
+            String IP = connectField.getText().trim();
 
             System.out.println("Connect clicked. Connecting to " + IP + "...");
 
             Gdx.app.setLogLevel(Application.LOG_DEBUG);
             Gdx.app.debug("BUTTON", "Connecting...");
 
-            //screen.setSocket(Gdx.net.newClientSocket(Net.Protocol.TCP, "172.22.158.6", 80, null));
+            screen.setSocket(Gdx.net.newClientSocket(Net.Protocol.TCP, IP, 80, null));
 
             System.out.println("Connected to " + IP);
         } else {

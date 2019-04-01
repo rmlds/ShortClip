@@ -29,16 +29,9 @@ public class MainMenuScreen extends ScreenAdapter {
         this.launchScreen = launchScreen;
         this.assetManager = assetManager;
 
-        try {
-            //business school "10.20.251.149"
-            socket = Gdx.net.newClientSocket(Net.Protocol.TCP,"172.22.158.6", 80, null);
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println(e.getMessage());
-        }
         /*
         System.out.println("Connecting...");
-        socket = Gdx.net.newClientSocket(Net.Protocol.TCP, "172.22.158.6", 80, null);
+        socket = Gdx.net.newClientSocket(Net.Protocol.TCP, "192.168.137.1", 80, null);
         System.out.println("Connected successfully.");
         */
 
@@ -142,7 +135,7 @@ public class MainMenuScreen extends ScreenAdapter {
         Table mainUI = new Table();
 
         TextButton connect = new TextButton("connect", skin, "ui-connect");
-        TextField connectField = new TextField("172.22.158.6", skin, "ui-connect-field");
+        TextField connectField = new TextField("192.168.137.1", skin, "ui-connect-field");
 
         TextButton createRoom = new TextButton("create room", skin, "ui-create-room");
         TextButton joinRoom = new TextButton("join room", skin, "ui-join-room");
